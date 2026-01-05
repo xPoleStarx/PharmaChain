@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Backgrounds */
+    --background: 255 255 255;
+    --foreground: 15 23 42; /* slate-900 */
+    
+    /* Primary (Medical Blue) */
+    --primary: 37 99 235; /* blue-600 */
+    --primary-foreground: 255 255 255;
+    
+    /* Secondary */
+    --secondary: 71 85 105; /* slate-600 */
+    --secondary-foreground: 255 255 255;
+    
+    /* Muted */
+    --muted: 248 250 252; /* slate-50 */
+    --muted-foreground: 100 116 139; /* slate-500 */
+    
+    /* Accent */
+    --accent: 239 246 255; /* blue-50 */
+    --accent-foreground: 30 58 138; /* blue-900 */
+    
+    /* Borders */
+    --border: 226 232 240; /* slate-200 */
+    --input: 226 232 240; /* slate-200 */
+    --ring: 59 130 246; /* blue-500 */
+    
+    /* Status Colors */
+    --success: 22 163 74; /* green-600 */
+    --warning: 234 179 8; /* yellow-500 */
+    --destructive: 220 38 38; /* red-600 */
+    
+    /* Card */
+    --card: 255 255 255;
+    --card-foreground: 15 23 42;
+    
+    /* Popover */
+    --popover: 255 255 255;
+    --popover-foreground: 15 23 42;
+    
+    /* Radius */
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  #root {
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+/* Print styles for QR code labels */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+  .print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

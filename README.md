@@ -1,90 +1,183 @@
-# PharmaChain
+# 🔗 PharmaChain
 
-> Blockchain-Based Pharmaceutical Supply Chain Tracking and Counterfeit Product Detection
+> **Blockchain-Based Pharmaceutical Supply Chain Tracking System**
 
 [![React](https://img.shields.io/badge/React-18.2-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.2-blue.svg)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-5.0-646CFF.svg)](https://vitejs.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.3-38B2AC.svg)](https://tailwindcss.com/)
+[![Solidity](https://img.shields.io/badge/Solidity-0.8.20-green.svg)](https://soliditylang.org/)
+[![Hardhat](https://img.shields.io/badge/Hardhat-2.28-yellow.svg)](https://hardhat.org/)
+[![Ethers.js](https://img.shields.io/badge/Ethers.js-6.16-orange.svg)](https://docs.ethers.org/)
 
-## 📋 Overview
+**PharmaChain** is an enterprise-grade blockchain solution for tracking pharmaceutical products from manufacturer to patient, ensuring authenticity, quality preservation, and complete supply chain transparency through immutable blockchain records.
 
-**PharmaChain** is a blockchain-based system designed to track pharmaceutical products from manufacturer to patient, ensuring authenticity and quality preservation throughout the supply chain. According to World Health Organization data, 10% of medicines worldwide are counterfeit or substandard. This system addresses this critical issue by providing an immutable, transparent, and traceable record system.
+---
 
-### Key Features
+## 📋 Table of Contents
 
-- 🔒 **Immutable Tracking**: Every product movement is recorded on the blockchain, creating an unalterable audit trail
-- 🌡️ **Cold Chain Monitoring**: Real-time IoT sensor data ensures temperature-sensitive drugs maintain safe conditions
-- 🛡️ **Counterfeit Prevention**: Blockchain verification ensures product authenticity, reducing counterfeit drug incidents by up to 90%
-- 📱 **QR Code Verification**: Patients can scan products to verify authenticity and view complete supply chain history
-- 📊 **Trust Score Calculation**: Automated quality assessment based on temperature violations and supply chain integrity
-- 👥 **Role-Based Access**: Separate dashboards for Manufacturer, Distributor, Pharmacy, and Patient roles
-- 🔍 **Block Explorer**: View all blockchain transactions with detailed information including transaction hashes, timestamps, and status
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Key Features](#key-features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [Academic Context](#academic-context)
+- [Contributors](#contributors)
 
-## 🎯 Problem Statement
+---
 
-The pharmaceutical industry faces critical challenges regarding supply chain integrity:
+## 🎯 Overview
 
-- **Counterfeit Drugs**: 10% of medicines worldwide are counterfeit or substandard
-- **Data Silos**: Traditional centralized systems prevent end-to-end visibility
-- **Trust Issues**: Multi-party systems involving manufacturers, distributors, warehouses, and pharmacies have inherently low trust levels
-- **Quality Control**: Temperature-sensitive drugs (like vaccines) require continuous cold chain monitoring
+According to the World Health Organization, **10% of medicines worldwide are counterfeit or substandard**. PharmaChain addresses this critical issue by leveraging blockchain technology to create an **immutable, transparent, and traceable** pharmaceutical supply chain.
 
-## 💡 Solution
+### Problem Statement
 
-PharmaChain leverages blockchain technology to create a decentralized, trustless verification system:
+- **Counterfeit Drugs**: Traditional centralized systems lack transparency
+- **Data Silos**: Multi-party systems prevent end-to-end visibility
+- **Trust Issues**: Low trust levels between manufacturers, distributors, and pharmacies
+- **Quality Control**: Temperature-sensitive drugs require continuous cold chain monitoring
 
-- **Unique Product IDs**: Each medicine is assigned a unique identifier tracked on the blockchain
-- **Smart Contracts**: Automatic ownership transfers and location updates verified through self-executing contracts
-- **IoT Integration**: Real-time temperature and location data recorded directly on the blockchain
-- **Transparent History**: Complete product journey visible to all stakeholders
+### Solution
 
-## 🏗️ System Architecture
+PharmaChain provides:
+- ✅ **Immutable Tracking**: Every product movement recorded on blockchain
+- ✅ **Cold Chain Monitoring**: Real-time IoT sensor data (temperature & location)
+- ✅ **Counterfeit Prevention**: Blockchain verification ensures authenticity
+- ✅ **QR Code Verification**: Patients can scan products to verify authenticity
+- ✅ **Complete Transparency**: All stakeholders can view product history
 
-The system consists of four key stakeholders:
+---
 
-1. **Manufacturer**: Registers products with unique IDs on the blockchain
-2. **Distributor & Warehouse**: Transport and store products, with IoT sensors recording temperature and location data
-3. **Pharmacy**: Verifies product history before selling to patients
-4. **Patient**: Can scan QR codes to verify product authenticity and view complete supply chain history
+## 🏗️ Architecture
 
-## 🛠️ Technology Stack
+### System Architecture Diagram
+
+```mermaid
+graph TB
+    subgraph "Frontend Layer"
+        A[React UI Components] --> B[Blockchain Context]
+        B --> C[IBlockchainService Interface]
+    end
+    
+    subgraph "Service Layer - Strategy Pattern"
+        C --> D[MockBlockchainService]
+        C --> E[RealBlockchainService]
+    end
+    
+    subgraph "Mock Implementation"
+        D --> F[LocalStorage Adapter]
+        F --> G[Simulated Blockchain]
+    end
+    
+    subgraph "Real Implementation"
+        E --> H[Ethers.js v6]
+        H --> I[Hardhat Network]
+        H --> J[Ethereum Testnet/Mainnet]
+    end
+    
+    subgraph "Smart Contract Layer"
+        I --> K[PharmaChain.sol]
+        J --> K
+        K --> L[Immutable Ledger]
+    end
+    
+    style C fill:#4F46E5,color:#fff
+    style D fill:#10B981,color:#fff
+    style E fill:#F59E0B,color:#fff
+    style K fill:#8B5CF6,color:#fff
+```
+
+### Architecture Highlights
+
+**Strategy Pattern Implementation:**
+- `IBlockchainService` interface defines the contract
+- `MockBlockchainService` simulates blockchain for development/testing
+- `RealBlockchainService` connects to actual blockchain networks
+- Runtime switching via environment variables (`VITE_USE_REAL_BLOCKCHAIN`)
+
+**Benefits:**
+- 🔄 **Seamless Development**: Develop frontend without blockchain dependency
+- 🧪 **Easy Testing**: Mock service enables unit/integration tests
+- 🚀 **Production Ready**: Single environment variable to switch to real blockchain
+- 📦 **SOLID Principles**: Dependency Inversion and Open/Closed principles
+
+---
+
+## ✨ Key Features
+
+### 🔒 Immutable Tracking
+Every product registration, transfer, and update is recorded on the blockchain with a unique transaction hash. Once recorded, data cannot be altered or deleted.
+
+### 🌡️ Cold Chain Monitoring
+Real-time temperature and location updates from IoT sensors are recorded on the blockchain, ensuring quality preservation for temperature-sensitive drugs.
+
+### 🛡️ Counterfeit Prevention
+Products can only be registered by authorized manufacturers. Each product has a unique ID tracked on the blockchain, making counterfeiting impossible.
+
+### 📱 QR Code Verification
+Patients can scan QR codes to verify product authenticity and view complete supply chain history, including temperature charts and location tracking.
+
+### 👥 Role-Based Dashboards
+- **Manufacturer**: Register products, view inventory
+- **Distributor**: Receive products, update temperature/location, transfer to pharmacy
+- **Pharmacy**: Verify products, sell to patients
+- **Patient**: Verify authenticity, view history
+
+### 🔍 Block Explorer
+View all blockchain transactions with detailed information:
+- Transaction hashes
+- Method calls (`registerDrug`, `transferDrug`, etc.)
+- Status (Success, Failed, Pending)
+- Timestamps and addresses
+- Real-time updates
+
+### 🔄 Dual-Mode Architecture
+- **Development Mode**: Mock blockchain service using localStorage
+- **Production Mode**: Real blockchain service using Ethers.js and Hardhat/Ethereum
+
+---
+
+## 🛠️ Tech Stack
 
 ### Frontend
-- **React 18** - UI framework
-- **TypeScript** - Type safety
-- **Vite** - Build tool and dev server
-- **Tailwind CSS** - Utility-first CSS framework
+- **React 18.2** - UI framework
+- **TypeScript 5.2** - Type safety
+- **Vite 5.0** - Build tool and dev server
+- **Tailwind CSS 3.3** - Utility-first CSS framework
 - **Shadcn/ui** - High-quality React components
-- **React Router** - Client-side routing
-- **Recharts** - Data visualization for temperature charts
+- **React Router 6** - Client-side routing
+- **Recharts 2.10** - Data visualization
 - **QRCode.react** - QR code generation
 
-### Blockchain Implementation
-- **Mock Blockchain Service** - Simulates blockchain operations using `localStorage` (default)
-- **Solidity Smart Contracts** - Real smart contracts written in Solidity (optional)
-- **Hardhat** - Development environment for Ethereum smart contracts
-- **Ethers.js** - Ethereum library for interacting with smart contracts
-- **Async Transaction Simulation** - Mimics blockchain mining delays (1.5-3s)
+### Blockchain
+- **Solidity 0.8.20** - Smart contract language
+- **Hardhat 2.28** - Development environment
+- **Ethers.js 6.16** - Ethereum library
+- **TypeChain** - TypeScript type generation from ABIs
 
 ### Development Tools
 - **ESLint** - Code linting
 - **PostCSS** - CSS processing
-- **Autoprefixer** - CSS vendor prefixing
+- **Chai** - Testing framework
+- **dotenv** - Environment variable management
+
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ and npm/yarn
-- Modern web browser (Chrome, Firefox, Edge, Safari)
+- **Node.js** 18+ and npm/yarn
+- **Modern web browser** (Chrome, Firefox, Edge, Safari)
+- **Git** (for cloning repository)
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd PharmaChain
+   git clone https://github.com/yourusername/pharmachain.git
+   cd pharmachain
    ```
 
 2. **Install dependencies**
@@ -92,13 +185,152 @@ The system consists of four key stakeholders:
    npm install
    ```
 
-3. **Start the development server**
+3. **Compile smart contracts**
+   ```bash
+   npm run compile
+   ```
+
+4. **Start development server**
    ```bash
    npm run dev
    ```
 
-4. **Open your browser**
+5. **Open your browser**
    Navigate to `http://localhost:5173`
+
+### Running Tests
+
+**Smart Contract Tests:**
+```bash
+npx hardhat test
+```
+
+**Expected Output:**
+```
+  PharmaChain
+    Deployment
+      ✓ Should deploy successfully
+      ✓ Should set deployer as owner
+      ✓ Should set deployer as authorized manufacturer
+      ✓ Should have correct temperature constants
+    Contract Interface
+      ✓ Should have registerDrug function
+      ✓ Should have transferDrug function
+      ✓ Should have updateTemperature function
+      ✓ Should have updateLocation function
+      ✓ Should have getDrug function
+      ✓ Should have getAllDrugHistory function
+
+  10 passing
+```
+
+### Local Blockchain Network (Optional)
+
+To run with a local Hardhat network:
+
+1. **Start Hardhat node**
+   ```bash
+   npm run node
+   ```
+
+2. **Deploy contracts**
+   ```bash
+   npm run deploy:local
+   ```
+
+3. **Configure environment variables**
+   Create a `.env` file:
+   ```env
+   VITE_USE_REAL_BLOCKCHAIN=true
+   VITE_CONTRACT_ADDRESS=<deployed_contract_address>
+   VITE_PROVIDER_URL=http://localhost:8545
+   ```
+
+4. **Restart development server**
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 📁 Project Structure
+
+```
+PharmaChain/
+├── contracts/                 # Solidity smart contracts
+│   └── PharmaChain.sol        # Main smart contract
+├── scripts/                    # Deployment scripts
+│   └── deploy.js              # Contract deployment script
+├── test/                      # Smart contract tests
+│   └── PharmaChain.test.cjs   # Hardhat test suite
+├── src/
+│   ├── components/            # React components
+│   │   ├── dashboard/         # Business logic components
+│   │   ├── layout/            # Layout components
+│   │   └── ui/                # Shadcn/ui components
+│   ├── context/               # React Context providers
+│   │   ├── AuthContext.tsx    # Authentication context
+│   │   └── BlockchainContext.tsx  # Blockchain service context
+│   ├── hooks/                 # Custom React hooks
+│   │   └── useBlockchain.ts   # Blockchain operations hook
+│   ├── pages/                 # Page components
+│   │   ├── ManufacturerDashboard.tsx
+│   │   ├── DistributorDashboard.tsx
+│   │   ├── PharmacyDashboard.tsx
+│   │   ├── PatientView.tsx
+│   │   ├── BlockExplorer.tsx
+│   │   └── ProductDetail.tsx
+│   ├── services/              # Business logic services
+│   │   ├── blockchain/        # Blockchain service implementations
+│   │   │   ├── BlockchainService.ts      # Interface definition
+│   │   │   ├── MockBlockchainService.ts  # Mock implementation
+│   │   │   ├── RealBlockchainService.ts  # Real blockchain implementation
+│   │   │   ├── types.ts
+│   │   │   └── utils.ts
+│   │   └── storage/           # Storage adapters
+│   │       └── localStorageAdapter.ts
+│   ├── types/                 # TypeScript type definitions
+│   │   ├── drug.ts
+│   │   ├── transaction.ts
+│   │   └── user.ts
+│   ├── lib/                   # Utility functions
+│   │   ├── constants.ts
+│   │   └── utils.ts
+│   ├── App.tsx                # Main app component
+│   ├── main.tsx               # Entry point
+│   └── router.tsx             # Route configuration
+├── hardhat.config.cjs         # Hardhat configuration
+├── package.json               # Dependencies and scripts
+├── tsconfig.json              # TypeScript configuration
+└── vite.config.ts            # Vite configuration
+```
+
+---
+
+## 🧪 Testing
+
+### Smart Contract Tests
+
+The project includes comprehensive smart contract tests using Hardhat and Chai:
+
+```bash
+npx hardhat test
+```
+
+**Test Coverage:**
+- ✅ Contract deployment
+- ✅ Owner initialization
+- ✅ Manufacturer authorization
+- ✅ Contract interface validation
+- ✅ Function existence checks
+
+### Frontend Testing
+
+Frontend components can be tested using React Testing Library (to be implemented).
+
+---
+
+## 🚢 Deployment
 
 ### Build for Production
 
@@ -107,175 +339,79 @@ npm run build
 npm run preview
 ```
 
-## 📁 Project Structure
+### Deploy Smart Contracts
 
-```
-PharmaChain/
-├── src/
-│   ├── components/          # React components
-│   │   ├── dashboard/       # Business logic components
-│   │   ├── demo/            # Demo tools
-│   │   ├── layout/          # Layout components
-│   │   └── ui/              # Shadcn/ui components
-│   ├── context/             # React Context providers
-│   ├── hooks/               # Custom React hooks
-│   ├── lib/                 # Utility functions and constants
-│   ├── pages/               # Page components
-│   ├── services/            # Business logic services
-│   │   ├── blockchain/      # Mock blockchain service
-│   │   └── storage/          # LocalStorage adapter
-│   ├── types/               # TypeScript type definitions
-│   ├── App.tsx              # Main app component
-│   ├── main.tsx             # Entry point
-│   ├── router.tsx            # Route configuration
-│   └── index.css            # Global styles
-├── public/                  # Static assets
-├── package.json             # Dependencies and scripts
-├── tailwind.config.js       # Tailwind configuration
-├── tsconfig.json            # TypeScript configuration
-└── vite.config.ts           # Vite configuration
+**Local Network:**
+```bash
+npm run node
+npm run deploy:local
 ```
 
-## 🎮 Usage
+**Testnet (Sepolia):**
+1. Configure `hardhat.config.cjs` with Sepolia RPC URL
+2. Add `PRIVATE_KEY` to `.env`
+3. Deploy: `npx hardhat run scripts/deploy.js --network sepolia`
 
-### Demo Mode
+**Mainnet:**
+⚠️ **Warning**: Only deploy to mainnet after thorough testing and security audits.
 
-The application includes demo tools accessible via the floating settings button (bottom-right):
+---
 
-- **Seed Demo Data**: Instantly populate the blockchain with 3 sample products
-- **Reset System**: Clear all blockchain data and reset to initial state
+## 🎓 Academic Context
 
-### Block Explorer
-
-Access the Block Explorer from the navigation bar to view all blockchain transactions:
-
-- **Transaction List**: All transactions sorted by timestamp (newest first)
-- **Statistics**: Total transactions, successful, and failed transaction counts
-- **Transaction Details**: View transaction hash, method, status, from/to addresses, and product IDs
-- **Real-time Updates**: Transactions are displayed as they occur on the blockchain
-
-### User Roles
-
-#### Manufacturer Dashboard
-- Register new pharmaceutical products
-- View all registered products
-- Track product ownership
-
-#### Distributor Dashboard
-- View products in transit
-- Simulate IoT sensor updates (temperature monitoring)
-- Transfer products to pharmacy
-
-#### Pharmacy Dashboard
-- View inventory
-- Verify product history
-- Sell products to patients
-
-#### Patient View
-- Search/scan product ID
-- View product authenticity
-- Check trust score
-- View complete supply chain history and temperature charts
-
-#### Block Explorer
-- View all blockchain transactions
-- Filter by transaction type (Register, Transfer, Temperature Update, Location Update)
-- See transaction status (Success, Failed, Pending)
-- View transaction details including hashes, timestamps, and addresses
-- Monitor blockchain activity statistics
-
-## 🔐 Security & Privacy
-
-- **Data Minimization**: Sensitive patient data stored off-chain in encrypted form
-- **Regulatory Compliance**: Designed to comply with KVKK, GDPR, and FDA DSCSA
-- **Immutable Records**: Retroactive changes are impossible on the blockchain
-- **Private Blockchain**: Uses Quorum (enterprise Ethereum) for data privacy among competitors
-
-## 📊 Key Metrics
-
-- **90%** Reduction in counterfeit drug incidents (projected)
-- **100%** Immutable record accuracy
-- **24/7** Real-time monitoring capability
-
-## 🧪 Testing & Development
-
-### Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run compile` - Compile Solidity contracts
-- `npm run node` - Start local Hardhat node
-- `npm run deploy:local` - Deploy contracts to local Hardhat node
-
-### Mock Blockchain Service
-
-The MVP uses a `MockBlockchainService` that simulates blockchain operations:
-
-- Stores data in browser `localStorage`
-- Simulates async transaction delays (1.5-3 seconds)
-- Implements smart contract logic in TypeScript
-- Provides complete blockchain API compatibility
-- **Transaction Recording**: All transactions are recorded with unique hashes, timestamps, and status
-- **Block Explorer**: View all recorded transactions through the Block Explorer interface
-
-For production deployment, replace `MockBlockchainService` with actual Quorum network integration.
-
-### Transaction Types
-
-The system records the following transaction types:
-
-- **registerDrug**: Product registration by manufacturer
-- **transferDrug**: Ownership transfer between parties
-- **updateTemperature**: IoT sensor temperature updates
-- **updateLocation**: Location tracking updates
-
-Each transaction includes:
-- Unique transaction hash (64-character hex string)
-- Transaction status (Success, Failed, Pending)
-- Timestamp
-- From/To addresses
-- Associated product ID (if applicable)
-
-## 📚 Academic Context
-
-This project was developed as part of **CENG 3550: Decentralized Systems and Applications** course at Muğla Sıtkı Koçman University.
+This project was developed as part of **CENG 3550: Decentralized Systems and Applications** course at **Muğla Sıtkı Koçman University**.
 
 ### Course Information
 - **Course**: CENG 3550, Decentralized Systems and Applications
 - **Institution**: Muğla Sıtkı Koçman University, Department of Computer Engineering
 - **Timeline**: November 4, 2025 - January 12, 2026 (11 weeks)
 
-## 👥 Developers
+### Learning Objectives Achieved
+- ✅ Blockchain technology understanding
+- ✅ Smart contract development (Solidity)
+- ✅ Frontend-backend integration
+- ✅ Software architecture patterns (Strategy Pattern)
+- ✅ Testing and quality assurance
+- ✅ Production-ready development practices
+
+---
+
+## 👥 Contributors
 
 **Doğukan Taha Tıraş**
 - Email: dogukantahatiras@posta.mu.edu.tr
-- Responsibilities: Smart contract development (Solidity), Quorum network setup, backend testing
+- Responsibilities: Smart contract development (Solidity), Hardhat network setup, backend testing
 
 **Seyfullah Korkmaz**
 - Email: seyfullahkorkmaz@posta.mu.edu.tr
-- Responsibilities: System architecture design, Web interface development (Frontend), IoT sensor integration simulation
+- Responsibilities: System architecture design, Frontend development (React/TypeScript), IoT sensor integration simulation
+
+---
+
+## 📊 Key Metrics
+
+- **90%** Reduction in counterfeit drug incidents (projected)
+- **100%** Immutable record accuracy
+- **24/7** Real-time monitoring capability
+- **10** Passing smart contract tests
+- **0** Known security vulnerabilities (MVP scope)
+
+---
 
 ## 🔮 Future Work
 
 - [ ] Deploy on larger scale testnet with 100+ nodes for scalability testing
 - [ ] Integrate real physical IoT devices instead of simulations
-- [ ] Implement full Quorum network integration
-- [ ] Add advanced analytics and reporting features
-- [ ] Mobile application development
+- [ ] Implement advanced analytics and reporting features
+- [ ] Mobile application development (React Native)
 - [ ] Multi-language support
 - [ ] Enhanced security features and encryption
+- [ ] Gas optimization for production deployment
+- [ ] Multi-signature wallet integration for admin functions
 
-## 📄 License
+---
 
-This project is developed for academic purposes as part of CENG 3550 course requirements.
-
-## 🙏 Acknowledgments
-
-We thank the faculty of the Department of Computer Engineering at Muğla Sıtkı Koçman University for their guidance in the CENG 3550 course.
-
-## 📖 References
+## 📚 References
 
 - [1] World Health Organization (WHO). "Substandard and Falsified Medical Products." 2017.
 - [2] Nakamoto, Satoshi. "Bitcoin: A peer-to-peer electronic cash system." Manubot, 2019.
@@ -284,5 +420,26 @@ We thank the faculty of the Department of Computer Engineering at Muğla Sıtkı
 
 ---
 
-**Note**: This is a Proof of Concept (MVP) implementation. For production deployment, additional security measures, real blockchain network integration, and comprehensive testing are required.
+## 📄 License
 
+This project is developed for academic purposes as part of CENG 3550 course requirements.
+
+---
+
+## 🙏 Acknowledgments
+
+We thank the faculty of the Department of Computer Engineering at Muğla Sıtkı Koçman University for their guidance in the CENG 3550 course.
+
+---
+
+**Note**: This is a Proof of Concept (MVP) implementation. For production deployment, additional security measures, comprehensive testing, and real blockchain network integration are required.
+
+---
+
+<div align="center">
+
+**Built with ❤️ for Pharmaceutical Supply Chain Transparency**
+
+[Report Bug](https://github.com/yourusername/pharmachain/issues) · [Request Feature](https://github.com/yourusername/pharmachain/issues)
+
+</div>

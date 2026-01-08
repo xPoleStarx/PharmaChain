@@ -32,4 +32,12 @@ module.exports = {
     cache: "./cache",
     artifacts: "./artifacts",
   },
+  // TypeChain configuration
+  // Generates TypeScript types from contract ABIs after compilation
+  typechain: {
+    outDir: "typechain-types",
+    target: "ethers-v6",
+    alwaysGenerateOverloads: false,
+    externalArtifacts: ["externalArtifacts/*.json"],
+  },
 };

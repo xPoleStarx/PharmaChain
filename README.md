@@ -108,7 +108,7 @@ npm run preview
 ## 📁 Project Structure
 
 ```
-enisFinal/
+PharmaChain/
 ├── src/
 │   ├── components/          # React components
 │   │   ├── dashboard/       # Business logic components

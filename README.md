@@ -176,7 +176,7 @@ View all blockchain transactions with detailed information:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/pharmachain.git
+   git clone https://github.com/xPoleStarx/pharmachain.git
    cd pharmachain
    ```
 
@@ -440,6 +440,6 @@ We thank the faculty of the Department of Computer Engineering at Muğla Sıtkı
 
 **Built with ❤️ for Pharmaceutical Supply Chain Transparency**
 
-[Report Bug](https://github.com/yourusername/pharmachain/issues) · [Request Feature](https://github.com/yourusername/pharmachain/issues)
+[Report Bug](https://github.com/xPoleStarx/pharmachain/issues) · [Request Feature](https://github.com/xPoleStarx/pharmachain/issues)
 
 </div>

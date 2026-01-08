@@ -1,15 +1,17 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useBlockchain as useBlockchainContext } from '@/context/BlockchainContext';
 import { Transaction, TransactionStatus } from '@/types/transaction';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { Database, CheckCircle2, XCircle, Clock, Package, Truck, Thermometer, MapPin, RefreshCw } from 'lucide-react';
+import { Database, CheckCircle2, XCircle, Clock, Package, Truck, Thermometer, MapPin, RefreshCw, ArrowLeft } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
 const BlockExplorer: React.FC = () => {
+  const navigate = useNavigate();
   const { blockchainService } = useBlockchainContext();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -174,24 +176,30 @@ const BlockExplorer: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold mb-2 text-slate-900">Block Explorer</h1>
-          <p className="text-slate-600">View all transactions recorded on the blockchain</p>
-          <p className="text-xs text-slate-500 mt-1">
-            Last updated: {format(lastUpdateTime, 'HH:mm:ss')} • Auto-refreshes every 2 seconds
-          </p>
-        </div>
-        <Button
-          onClick={handleManualRefresh}
-          disabled={refreshing}
-          variant="outline"
-          size="sm"
-          className="flex items-center gap-2"
-        >
-          <RefreshCw className={cn('w-4 h-4', refreshing && 'animate-spin')} />
-          {refreshing ? 'Refreshing...' : 'Refresh'}
+      <div className="mb-6">
+        <Button variant="ghost" onClick={() => navigate(-1)} className="mb-4">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back
         </Button>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold mb-2 text-slate-900">Block Explorer</h1>
+            <p className="text-slate-600">View all transactions recorded on the blockchain</p>
+            <p className="text-xs text-slate-500 mt-1">
+              Last updated: {format(lastUpdateTime, 'HH:mm:ss')} • Auto-refreshes every 2 seconds
+            </p>
+          </div>
+          <Button
+            onClick={handleManualRefresh}
+            disabled={refreshing}
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-2"
+          >
+            <RefreshCw className={cn('w-4 h-4', refreshing && 'animate-spin')} />
+            {refreshing ? 'Refreshing...' : 'Refresh'}
+          </Button>
+        </div>
       </div>
 
       {/* Statistics */}

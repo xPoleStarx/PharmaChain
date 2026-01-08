@@ -3,12 +3,14 @@ import { Drug } from '@/types/drug';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { StatusBadge } from '@/components/ui/status-badge';
-import { Thermometer, MapPin, Package } from 'lucide-react';
+import { Thermometer, MapPin, Package, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ProductCardProps {
   drug: Drug;
   onViewDetails?: (drugId: string) => void;
+  onTransferClick?: (drug: Drug) => void;
+  showTransferButton?: boolean;
 }
 
 const truncateAddress = (address: string, start: number = 6, end: number = 4): string => {
@@ -35,7 +37,12 @@ const getTemperatureColor = (temp: number): string => {
   return 'text-green-600';
 };
 
-export const ProductCard: React.FC<ProductCardProps> = ({ drug, onViewDetails }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({
+  drug,
+  onViewDetails,
+  onTransferClick,
+  showTransferButton = false
+}) => {
   const status = getStatusFromLocation(drug.location);
   const tempColor = getTemperatureColor(drug.temperature);
 
@@ -73,13 +80,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({ drug, onViewDetails })
         </div>
       </CardContent>
       <CardFooter>
-        <Button
-          variant="ghost"
-          className="w-full"
-          onClick={() => onViewDetails?.(drug.id)}
-        >
-          View Details
-        </Button>
+        <div className="w-full flex gap-2">
+          <Button
+            variant="ghost"
+            className="flex-1"
+            onClick={() => onViewDetails?.(drug.id)}
+          >
+            View Details
+          </Button>
+          {showTransferButton && onTransferClick && (
+            <Button
+              variant="default"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+              onClick={() => onTransferClick(drug)}
+            >
+              <ArrowRight className="w-4 h-4 mr-2" />
+              Transfer
+            </Button>
+          )}
+        </div>
       </CardFooter>
     </Card>
   );

@@ -7,6 +7,7 @@ import DistributorDashboard from './pages/DistributorDashboard';
 import PharmacyDashboard from './pages/PharmacyDashboard';
 import PatientView from './pages/PatientView';
 import ProductDetail from './pages/ProductDetail';
+import BlockExplorer from './pages/BlockExplorer';
 import NotFound from './pages/NotFound';
 
 export const router = createBrowserRouter([
@@ -37,6 +38,10 @@ export const router = createBrowserRouter([
       {
         path: 'product/:id',
         element: <ProductDetail />,
+      },
+      {
+        path: 'explorer',
+        element: <BlockExplorer />,
       },
       {
         path: '*',

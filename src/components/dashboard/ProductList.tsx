@@ -8,12 +8,16 @@ interface ProductListProps {
   drugs: Drug[];
   isLoading?: boolean;
   onProductClick?: (drugId: string) => void;
+  onTransferClick?: (drug: Drug) => void;
+  showTransferButton?: boolean;
 }
 
 export const ProductList: React.FC<ProductListProps> = ({
   drugs,
   isLoading = false,
   onProductClick,
+  onTransferClick,
+  showTransferButton = false,
 }) => {
   if (isLoading) {
     return (
@@ -43,6 +47,8 @@ export const ProductList: React.FC<ProductListProps> = ({
           key={drug.id}
           drug={drug}
           onViewDetails={onProductClick}
+          onTransferClick={onTransferClick}
+          showTransferButton={showTransferButton}
         />
       ))}
     </div>

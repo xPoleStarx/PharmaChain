@@ -8,11 +8,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { useToast } from '@/hooks/use-toast';
-import { Plus } from 'lucide-react';
+import { Plus, ArrowRight } from 'lucide-react';
+import { Drug } from '@/types/drug';
+import { ROLE_ADDRESSES } from '@/lib/constants';
+import { UserRole } from '@/types/user';
 
 const ManufacturerDashboard: React.FC = () => {
   const { currentUser } = useAuth();
-  const { loading, error, products, fetchMyProducts, registerProduct, clearError } = useBlockchain();
+  const { loading, error, products, fetchMyProducts, registerProduct, transferProduct, clearError } = useBlockchain();
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
@@ -20,6 +23,9 @@ const ManufacturerDashboard: React.FC = () => {
     name: '',
     batchNumber: '',
   });
+  const [selectedDrugForTransfer, setSelectedDrugForTransfer] = useState<Drug | null>(null);
+  const [isTransferDialogOpen, setIsTransferDialogOpen] = useState(false);
+  const [isTransferring, setIsTransferring] = useState(false);
 
   // Fetch products on mount and when user changes
   useEffect(() => {
@@ -83,6 +89,53 @@ const ManufacturerDashboard: React.FC = () => {
     } finally {
       setIsRegistering(false);
     }
+  };
+
+  const handleTransferToDistributor = async () => {
+    if (!selectedDrugForTransfer || !currentUser?.address) {
+      return;
+    }
+
+    setIsTransferring(true);
+    clearError();
+
+    const distributorAddress = ROLE_ADDRESSES[UserRole.DISTRIBUTOR];
+
+    try {
+      const result = await transferProduct(
+        selectedDrugForTransfer.id,
+        currentUser.address,
+        distributorAddress
+      );
+
+      if (result.success) {
+        toast({
+          title: 'Transfer Successful',
+          description: `Product shipped to distributor! Transaction: ${result.transactionHash.slice(0, 10)}...`,
+        });
+        setIsTransferDialogOpen(false);
+        setSelectedDrugForTransfer(null);
+      } else {
+        toast({
+          title: 'Transfer Failed',
+          description: result.error || 'Failed to transfer product',
+          variant: 'destructive',
+        });
+      }
+    } catch (err) {
+      toast({
+        title: 'Error',
+        description: err instanceof Error ? err.message : 'An unexpected error occurred',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsTransferring(false);
+    }
+  };
+
+  const openTransferDialog = (drug: Drug) => {
+    setSelectedDrugForTransfer(drug);
+    setIsTransferDialogOpen(true);
   };
 
   return (
@@ -156,6 +209,52 @@ const ManufacturerDashboard: React.FC = () => {
         </Dialog>
       </div>
 
+      {/* Transfer Dialog */}
+      <Dialog open={isTransferDialogOpen} onOpenChange={setIsTransferDialogOpen}>
+        <DialogContent className="bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-slate-900">Transfer to Distributor</DialogTitle>
+            <DialogDescription className="text-slate-600">
+              Transfer ownership of this product to the distributor. This action will be recorded on the blockchain.
+            </DialogDescription>
+          </DialogHeader>
+          {selectedDrugForTransfer && (
+            <div className="py-4">
+              <div className="space-y-2">
+                <p className="text-sm text-slate-700">
+                  <span className="font-semibold">Product:</span> {selectedDrugForTransfer.name}
+                </p>
+                <p className="text-sm text-slate-700">
+                  <span className="font-semibold">ID:</span> {selectedDrugForTransfer.id}
+                </p>
+                <p className="text-sm text-slate-700">
+                  <span className="font-semibold">Current Temperature:</span> {selectedDrugForTransfer.temperature}°C
+                </p>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsTransferDialogOpen(false)}
+              disabled={isTransferring}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleTransferToDistributor} disabled={isTransferring} className="bg-blue-600 hover:bg-blue-700 text-white">
+              {isTransferring ? (
+                <>
+                  <Spinner size="sm" className="mr-2" />
+                  Mining Transaction...
+                </>
+              ) : (
+                'Confirm Transfer'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {error && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md text-red-900">
           {error}
@@ -168,6 +267,8 @@ const ManufacturerDashboard: React.FC = () => {
         onProductClick={(drugId) => {
           window.location.href = `/product/${drugId}`;
         }}
+        onTransferClick={openTransferDialog}
+        showTransferButton={true}
       />
     </div>
   );

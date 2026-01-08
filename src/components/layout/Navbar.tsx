@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { UserRole } from '@/types/user';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Package } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Package, Database } from 'lucide-react';
 
 const roleRoutes: Record<UserRole, string> = {
   [UserRole.MANUFACTURER]: '/manufacturer',
@@ -32,11 +33,22 @@ export const Navbar: React.FC = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <Package className="w-6 h-6 text-blue-600" />
-            <h1 className="text-xl font-bold text-slate-900">
-              PharmaChain
-            </h1>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Package className="w-6 h-6 text-blue-600" />
+              <h1 className="text-xl font-bold text-slate-900">
+                PharmaChain
+              </h1>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate('/explorer')}
+              className="text-slate-700 hover:text-slate-900"
+            >
+              <Database className="w-4 h-4 mr-2" />
+              Block Explorer
+            </Button>
           </div>
 
           {/* Role Switcher */}

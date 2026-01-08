@@ -19,6 +19,7 @@
 - 📱 **QR Code Verification**: Patients can scan products to verify authenticity and view complete supply chain history
 - 📊 **Trust Score Calculation**: Automated quality assessment based on temperature violations and supply chain integrity
 - 👥 **Role-Based Access**: Separate dashboards for Manufacturer, Distributor, Pharmacy, and Patient roles
+- 🔍 **Block Explorer**: View all blockchain transactions with detailed information including transaction hashes, timestamps, and status
 
 ## 🎯 Problem Statement
 
@@ -142,6 +143,15 @@ The application includes demo tools accessible via the floating settings button 
 - **Seed Demo Data**: Instantly populate the blockchain with 3 sample products
 - **Reset System**: Clear all blockchain data and reset to initial state
 
+### Block Explorer
+
+Access the Block Explorer from the navigation bar to view all blockchain transactions:
+
+- **Transaction List**: All transactions sorted by timestamp (newest first)
+- **Statistics**: Total transactions, successful, and failed transaction counts
+- **Transaction Details**: View transaction hash, method, status, from/to addresses, and product IDs
+- **Real-time Updates**: Transactions are displayed as they occur on the blockchain
+
 ### User Roles
 
 #### Manufacturer Dashboard
@@ -164,6 +174,13 @@ The application includes demo tools accessible via the floating settings button 
 - View product authenticity
 - Check trust score
 - View complete supply chain history and temperature charts
+
+#### Block Explorer
+- View all blockchain transactions
+- Filter by transaction type (Register, Transfer, Temperature Update, Location Update)
+- See transaction status (Success, Failed, Pending)
+- View transaction details including hashes, timestamps, and addresses
+- Monitor blockchain activity statistics
 
 ## 🔐 Security & Privacy
 
@@ -195,8 +212,26 @@ The MVP uses a `MockBlockchainService` that simulates blockchain operations:
 - Simulates async transaction delays (1.5-3 seconds)
 - Implements smart contract logic in TypeScript
 - Provides complete blockchain API compatibility
+- **Transaction Recording**: All transactions are recorded with unique hashes, timestamps, and status
+- **Block Explorer**: View all recorded transactions through the Block Explorer interface
 
 For production deployment, replace `MockBlockchainService` with actual Quorum network integration.
+
+### Transaction Types
+
+The system records the following transaction types:
+
+- **registerDrug**: Product registration by manufacturer
+- **transferDrug**: Ownership transfer between parties
+- **updateTemperature**: IoT sensor temperature updates
+- **updateLocation**: Location tracking updates
+
+Each transaction includes:
+- Unique transaction hash (64-character hex string)
+- Transaction status (Success, Failed, Pending)
+- Timestamp
+- From/To addresses
+- Associated product ID (if applicable)
 
 ## 📚 Academic Context
 

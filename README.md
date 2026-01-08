@@ -60,9 +60,11 @@ The system consists of four key stakeholders:
 - **Recharts** - Data visualization for temperature charts
 - **QRCode.react** - QR code generation
 
-### Blockchain Simulation
-- **Mock Blockchain Service** - Simulates blockchain operations using `localStorage`
-- **Smart Contract Logic** - Solidity-inspired contract logic implemented in TypeScript
+### Blockchain Implementation
+- **Mock Blockchain Service** - Simulates blockchain operations using `localStorage` (default)
+- **Solidity Smart Contracts** - Real smart contracts written in Solidity (optional)
+- **Hardhat** - Development environment for Ethereum smart contracts
+- **Ethers.js** - Ethereum library for interacting with smart contracts
 - **Async Transaction Simulation** - Mimics blockchain mining delays (1.5-3s)
 
 ### Development Tools
@@ -203,6 +205,9 @@ Access the Block Explorer from the navigation bar to view all blockchain transac
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
+- `npm run compile` - Compile Solidity contracts
+- `npm run node` - Start local Hardhat node
+- `npm run deploy:local` - Deploy contracts to local Hardhat node
 
 ### Mock Blockchain Service
 

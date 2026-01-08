@@ -4,8 +4,9 @@ import { UserRole } from '../../types/user';
 import { generateTransactionHash, delay } from './utils';
 import { DEFAULT_CONFIG } from './types';
 import { LocalStorageAdapter } from '../storage/localStorageAdapter';
+import { IBlockchainService } from './BlockchainService';
 
-export class MockBlockchainService {
+export class MockBlockchainService implements IBlockchainService {
   private config = DEFAULT_CONFIG;
 
   /**

@@ -82,7 +82,7 @@ The system consists of four key stakeholders:
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd enisFinal
+   cd PharmaChain
    ```
 
 2. **Install dependencies**

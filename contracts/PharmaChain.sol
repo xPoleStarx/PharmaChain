@@ -48,28 +48,28 @@ contract PharmaChain {
 
     // Events
     event DrugRegistered(
-        string indexed drugId,
+        string drugId,
         address indexed manufacturer,
         string name,
         bytes32 transactionHash
     );
 
     event DrugTransferred(
-        string indexed drugId,
+        string drugId,
         address indexed from,
         address indexed to,
         bytes32 transactionHash
     );
 
     event TemperatureUpdated(
-        string indexed drugId,
+        string drugId,
         int256 temperature,
         address updatedBy,
         bytes32 transactionHash
     );
 
     event LocationUpdated(
-        string indexed drugId,
+        string drugId,
         string location,
         address updatedBy,
         bytes32 transactionHash

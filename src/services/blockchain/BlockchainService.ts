@@ -36,4 +36,5 @@ export interface IBlockchainService {
   getAllDrugsByOwner(ownerAddress: string): Promise<Drug[]>;
   getDrugHistory(drugId: string): Promise<DrugHistory[]>;
   getAllTransactions(): Promise<any[]>;
+  connectWallet(): Promise<string>;
 }

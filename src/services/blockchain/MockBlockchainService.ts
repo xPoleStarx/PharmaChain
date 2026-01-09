@@ -392,6 +392,11 @@ export class MockBlockchainService implements IBlockchainService {
     const ledger = this.getLedger();
     return ledger.transactions;
   }
+
+  async connectWallet(): Promise<string> {
+    await delay(500, 1000);
+    return ROLE_ADDRESSES[UserRole.MANUFACTURER];
+  }
 }
 
 // Export singleton instance

@@ -56,10 +56,5 @@ deployments/
 *.tsbuildinfo
 
 # Debug files
-DEBUG_GUIDE.md
-DIAGNOSIS_REPORT.md
-FIX_APPLIED.md
-CLEAR_CACHE_NOW.md
-SETUP_GUIDE.md
-FINAL_FIX.md
+
 clear-cache.js

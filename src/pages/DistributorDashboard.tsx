@@ -7,10 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Spinner } from '@/components/ui/spinner';
 import { useToast } from '@/hooks/use-toast';
-import { ROLE_ADDRESSES } from '@/lib/constants';
-import { UserRole } from '@/types/user';
 import { Drug } from '@/types/drug';
 import { Thermometer, Truck } from 'lucide-react';
+import { ethers } from 'ethers';
 
 const DistributorDashboard: React.FC = () => {
   const { currentUser } = useAuth();
@@ -18,6 +17,7 @@ const DistributorDashboard: React.FC = () => {
   const { toast } = useToast();
   const [selectedDrug, setSelectedDrug] = useState<Drug | null>(null);
   const [isTransferDialogOpen, setIsTransferDialogOpen] = useState(false);
+  const [recipientAddress, setRecipientAddress] = useState('');
   const [isTransferring, setIsTransferring] = useState(false);
   const [simulatingDrugId, setSimulatingDrugId] = useState<string | null>(null);
 
@@ -36,13 +36,15 @@ const DistributorDashboard: React.FC = () => {
     setIsTransferring(true);
     clearError();
 
-    const pharmacyAddress = ROLE_ADDRESSES[UserRole.PHARMACY];
-
     try {
+      if (!ethers.isAddress(recipientAddress)) {
+        throw new Error('Invalid Ethereum address. Please check and try again.');
+      }
+
       const result = await transferProduct(
         selectedDrug.id,
         currentUser.address,
-        pharmacyAddress
+        recipientAddress
       );
 
       if (result.success) {
@@ -52,6 +54,7 @@ const DistributorDashboard: React.FC = () => {
         });
         setIsTransferDialogOpen(false);
         setSelectedDrug(null);
+        setRecipientAddress('');
       } else {
         toast({
           title: 'Transfer Failed',
@@ -106,6 +109,7 @@ const DistributorDashboard: React.FC = () => {
 
   const openTransferDialog = (drug: Drug) => {
     setSelectedDrug(drug);
+    setRecipientAddress('');
     setIsTransferDialogOpen(true);
   };
 
@@ -194,6 +198,23 @@ const DistributorDashboard: React.FC = () => {
                 <p className="text-sm text-slate-700">
                   <span className="font-semibold">Current Temperature:</span> {selectedDrug.temperature}°C
                 </p>
+                <div className="grid gap-2 pt-2 text-slate-900 font-medium">
+                  <label htmlFor="recipientAddress" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Recipient Address (Pharmacy Wallet)
+                  </label>
+                  <input
+                    id="recipientAddress"
+                    className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    placeholder="0x..."
+                    value={recipientAddress}
+                    onChange={(e) => setRecipientAddress(e.target.value)}
+                    disabled={isTransferring}
+                    required
+                  />
+                  <p className="text-xs text-slate-500">
+                    Paste the Sepolia address of the pharmacy you want to ship to.
+                  </p>
+                </div>
               </div>
             </div>
           )}
@@ -205,7 +226,11 @@ const DistributorDashboard: React.FC = () => {
             >
               Cancel
             </Button>
-            <Button onClick={handleTransferToPharmacy} disabled={isTransferring} className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button
+              onClick={handleTransferToPharmacy}
+              disabled={isTransferring || !recipientAddress.trim()}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
               {isTransferring ? (
                 <>
                   <Spinner size="sm" className="mr-2" />

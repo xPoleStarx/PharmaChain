@@ -12,6 +12,12 @@ export class RealBlockchainService implements IBlockchainService {
   private provider: ethers.BrowserProvider | ethers.JsonRpcProvider;
   private signer: ethers.Signer | null = null;
 
+  // Fixed safe starting block for Sepolia queries
+  // Contract was deployed at block 10010329, so we start searching from 10010000
+  // This dramatically reduces query time and ensures we find all events
+  private readonly SAFE_START_BLOCK = 10010000;
+  private deploymentBlock: number = this.SAFE_START_BLOCK;
+
   constructor(contractAddress: string, providerUrl?: string) {
     // Initialize provider
     if (typeof window !== 'undefined' && window.ethereum) {
@@ -27,6 +33,8 @@ export class RealBlockchainService implements IBlockchainService {
 
     // Initialize contract
     this.contract = new ethers.Contract(contractAddress, PharmaChainArtifact.abi, this.provider);
+
+    console.log('📊 Using fixed safe start block for queries:', this.SAFE_START_BLOCK);
   }
 
   /**
@@ -232,82 +240,85 @@ export class RealBlockchainService implements IBlockchainService {
   async getAllDrugsByOwner(ownerAddress: string): Promise<Drug[]> {
     try {
       const normalizedOwner = ownerAddress.toLowerCase();
-      console.log('🔍 [getAllDrugsByOwner] Starting fetch for owner:', ownerAddress);
-      console.log('🔍 [getAllDrugsByOwner] Normalized owner:', normalizedOwner);
+      console.log('🔍 [getAllDrugsByOwner] Fetching all on-chain events for owner:', normalizedOwner);
 
-      const registeredFilter = this.contract.filters.DrugRegistered(null, ownerAddress);
-      const transferredToFilter = this.contract.filters.DrugTransferred(null, null, ownerAddress);
+      const fromBlock = this.deploymentBlock;
 
-      console.log('🔍 [getAllDrugsByOwner] Filters created:', {
-        registeredFilter,
-        transferredToFilter
-      });
-
+      // 1. Fetch ALL relevant events for the range (Unfiltered)
+      // We fetch everything and filter in-memory to bypass Sepolia indexing issues
       const [regEvents, transEvents] = await Promise.all([
-        this.contract.queryFilter(registeredFilter, 0, 'latest'),
-        this.contract.queryFilter(transferredToFilter, 0, 'latest'),
+        this.contract.queryFilter(this.contract.filters.DrugRegistered(), fromBlock, 'latest'),
+        this.contract.queryFilter(this.contract.filters.DrugTransferred(), fromBlock, 'latest'),
       ]);
 
-      console.log('🔍 [getAllDrugsByOwner] Events found:', {
-        registeredEvents: regEvents.length,
-        transferredEvents: transEvents.length
+      console.log('📊 [getAllDrugsByOwner] Total raw events found:', {
+        registered: regEvents.length,
+        transferred: transEvents.length
       });
-
-      if (regEvents.length > 0) {
-        console.log('🔍 [getAllDrugsByOwner] Sample registered event:', regEvents[0]);
-      }
 
       const drugIds = new Set<string>();
 
-      const extractId = (event: any): string => {
-        const args = event.args;
+      // 2. Helper to safely extract Drug ID
+      const extractIdFromArgs = (args: any): string => {
         const id = args.drugId || args[0];
-        if (typeof id === 'object' && id !== null) {
-          return id.hash || JSON.stringify(id);
-        }
-        return String(id);
+        return typeof id === 'object' ? (id.hash || JSON.stringify(id)) : String(id);
       };
 
-      regEvents.forEach((e: any) => {
-        const id = extractId(e);
-        console.log('🔍 [getAllDrugsByOwner] Extracted drugId from registered event:', id);
-        drugIds.add(id);
+      // 3. Process Registrations (Where user is the manufacturer)
+      regEvents.forEach((event: any) => {
+        if (!event.args) return;
+
+        const manufacturer = String(event.args.manufacturer || event.args[1]).toLowerCase();
+        const drugId = extractIdFromArgs(event.args);
+
+        if (manufacturer === normalizedOwner) {
+          console.log(`✅ Match found (Registered): ${drugId}`);
+          drugIds.add(drugId);
+        }
       });
 
-      transEvents.forEach((e: any) => {
-        const id = extractId(e);
-        console.log('🔍 [getAllDrugsByOwner] Extracted drugId from transfer event:', id);
-        drugIds.add(id);
+      // 4. Process Transfers (Where user is the recipient)
+      transEvents.forEach((event: any) => {
+        if (!event.args) return;
+
+        const to = String(event.args.to || event.args[2]).toLowerCase();
+        const drugId = extractIdFromArgs(event.args);
+
+        // Debug log for every transfer to trace the flow
+        console.log('📡 Check Transfer:', {
+          drugId,
+          from: event.args.from || event.args[1],
+          to: to,
+          lookingFor: normalizedOwner
+        });
+
+        if (to === normalizedOwner) {
+          console.log(`✅ Match found (Transferred to): ${drugId}`);
+          drugIds.add(drugId);
+        }
       });
 
-      console.log('🔍 [getAllDrugsByOwner] Total unique drug IDs:', drugIds.size, Array.from(drugIds));
-
+      // 5. Hydrate Drug Details & Verify Current Ownership
       const drugs: Drug[] = [];
+      console.log(`🔍 [getAllDrugsByOwner] Validating current ownership for ${drugIds.size} candidate(s)...`);
+
       for (const id of drugIds) {
-        console.log('🔍 [getAllDrugsByOwner] Fetching drug details for ID:', id);
         const drug = await this.getDrugById(id);
         if (drug) {
-          console.log('🔍 [getAllDrugsByOwner] Drug found:', {
-            id: drug.id,
-            name: drug.name,
-            currentOwner: drug.currentOwner,
-            normalizedCurrentOwner: drug.currentOwner.toLowerCase(),
-            matches: drug.currentOwner.toLowerCase() === normalizedOwner
-          });
-          if (drug.currentOwner.toLowerCase() === normalizedOwner) {
+          const currentOwner = drug.currentOwner.toLowerCase();
+
+          if (currentOwner === normalizedOwner) {
             drugs.push(drug);
           } else {
-            console.log('⚠️ [getAllDrugsByOwner] Drug ownership mismatch - skipping');
+            console.log(`ℹ️ Skipping ${id}: User was recipient, but current owner is ${currentOwner}`);
           }
-        } else {
-          console.log('⚠️ [getAllDrugsByOwner] Drug not found for ID:', id);
         }
       }
 
-      console.log('🔍 [getAllDrugsByOwner] Final result:', drugs.length, 'drugs owned by', ownerAddress);
+      console.log(`🎯 [getAllDrugsByOwner] Final Dashboard Count: ${drugs.length} for ${normalizedOwner}`);
       return drugs;
     } catch (error) {
-      console.error('❌ [getAllDrugsByOwner] Error fetching drugs by owner:', error);
+      console.error('❌ [getAllDrugsByOwner] Critical fetch error:', error);
       return [];
     }
   }
@@ -333,44 +344,62 @@ export class RealBlockchainService implements IBlockchainService {
 
   async getAllTransactions(): Promise<Transaction[]> {
     try {
+      console.log('🔍 [getAllTransactions] Querying from block:', this.deploymentBlock);
+
       const [reg, trans, temp, loc] = await Promise.all([
-        this.contract.queryFilter(this.contract.filters.DrugRegistered(), 0, 'latest'),
-        this.contract.queryFilter(this.contract.filters.DrugTransferred(), 0, 'latest'),
-        this.contract.queryFilter(this.contract.filters.TemperatureUpdated(), 0, 'latest'),
-        this.contract.queryFilter(this.contract.filters.LocationUpdated(), 0, 'latest'),
+        this.contract.queryFilter(this.contract.filters.DrugRegistered(), this.deploymentBlock, 'latest'),
+        this.contract.queryFilter(this.contract.filters.DrugTransferred(), this.deploymentBlock, 'latest'),
+        this.contract.queryFilter(this.contract.filters.TemperatureUpdated(), this.deploymentBlock, 'latest'),
+        this.contract.queryFilter(this.contract.filters.LocationUpdated(), this.deploymentBlock, 'latest'),
       ]);
+
+      console.log('🔍 [getAllTransactions] Events found:', {
+        registered: reg.length,
+        transferred: trans.length,
+        temperatureUpdated: temp.length,
+        locationUpdated: loc.length,
+        total: reg.length + trans.length + temp.length + loc.length
+      });
 
       const allEvents = [...reg, ...trans, ...temp, ...loc];
 
       const transactions = await Promise.all(
-        allEvents.map(async (event: any) => {
-          const block = await event.getBlock();
+        allEvents.map(async (event) => {
+          // Type guard to ensure we have EventLog with args
+          if (!('args' in event) || !event.args) {
+            return null;
+          }
+
+          // Now we know it's an EventLog, cast it explicitly
+          const eventLog = event as ethers.EventLog;
+
+          const block = await eventLog.getBlock();
           let method = 'unknown';
-          const fragmentName = event.fragment ? event.fragment.name : 'unknown';
+          const fragmentName = eventLog.fragment ? eventLog.fragment.name : 'unknown';
 
           if (fragmentName === 'DrugRegistered') method = 'registerDrug';
           if (fragmentName === 'DrugTransferred') method = 'transferDrug';
           if (fragmentName === 'TemperatureUpdated') method = 'updateTemperature';
           if (fragmentName === 'LocationUpdated') method = 'updateLocation';
 
-          const drugIdRaw = event.args.drugId || event.args[0];
+          const drugIdRaw = eventLog.args.drugId || eventLog.args[0];
           const drugId = typeof drugIdRaw === 'object' ? (drugIdRaw.hash || JSON.stringify(drugIdRaw)) : String(drugIdRaw);
 
           return {
-            hash: String(event.transactionHash),
+            hash: String(eventLog.transactionHash),
             status: TransactionStatus.SUCCESS,
             timestamp: Number(block.timestamp) * 1000,
-            from: String(event.args.manufacturer || event.args.from || event.args.updatedBy || event.args[1] || ''),
-            to: event.args.to ? String(event.args.to) : undefined,
+            from: String(eventLog.args.manufacturer || eventLog.args.from || eventLog.args.updatedBy || eventLog.args[1] || ''),
+            to: eventLog.args.to ? String(eventLog.args.to) : undefined,
             method,
             drugId,
           } as Transaction;
         })
       );
 
-      return transactions.sort((a, b) => b.timestamp - a.timestamp);
+      return transactions.filter((t): t is Transaction => t !== null).sort((a, b) => b.timestamp - a.timestamp);
     } catch (error) {
-      console.error('Error fetching transactions:', error);
+      console.error('❌ [getAllTransactions] Error fetching transactions:', error);
       return [];
     }
   }

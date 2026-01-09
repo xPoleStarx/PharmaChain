@@ -6,15 +6,21 @@ import { ProductCard } from '@/components/dashboard/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { useToast } from '@/hooks/use-toast';
-import { ROLE_ADDRESSES } from '@/lib/constants';
-import { UserRole } from '@/types/user';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { CheckCircle2 } from 'lucide-react';
+import { ethers } from 'ethers';
+import { Drug } from '@/types/drug';
 
 const PharmacyDashboard: React.FC = () => {
   const { currentUser } = useAuth();
   const { loading, error, products, fetchMyProducts, transferProduct, clearError } = useBlockchain();
   const { toast } = useToast();
-  const [verifyingId, setVerifyingId] = React.useState<string | null>(null);
+  const [selectedDrug, setSelectedDrug] = React.useState<Drug | null>(null);
+  const [isSaleDialogOpen, setIsSaleDialogOpen] = React.useState(false);
+  const [patientAddress, setPatientAddress] = React.useState('');
+  const [isSelling, setIsSelling] = React.useState(false);
 
   // Fetch products on mount and when user changes
   useEffect(() => {
@@ -23,24 +29,29 @@ const PharmacyDashboard: React.FC = () => {
     }
   }, [currentUser?.address, fetchMyProducts]);
 
-  const handleVerifyAndSell = async (drugId: string) => {
-    if (!currentUser?.address) {
+  const handleVerifyAndSell = async () => {
+    if (!selectedDrug || !currentUser?.address) {
       return;
     }
 
-    setVerifyingId(drugId);
+    setIsSelling(true);
     clearError();
 
-    const patientAddress = ROLE_ADDRESSES[UserRole.PATIENT];
-
     try {
-      const result = await transferProduct(drugId, currentUser.address, patientAddress);
+      if (!ethers.isAddress(patientAddress)) {
+        throw new Error('Invalid Ethereum address. Please check and try again.');
+      }
+
+      const result = await transferProduct(selectedDrug.id, currentUser.address, patientAddress);
 
       if (result.success) {
         toast({
           title: 'Product Sold',
           description: 'Product has been verified and sold to patient. Ownership transferred successfully!',
         });
+        setIsSaleDialogOpen(false);
+        setSelectedDrug(null);
+        setPatientAddress('');
       } else {
         toast({
           title: 'Sale Failed',
@@ -55,8 +66,14 @@ const PharmacyDashboard: React.FC = () => {
         variant: 'destructive',
       });
     } finally {
-      setVerifyingId(null);
+      setIsSelling(false);
     }
+  };
+
+  const openSaleDialog = (drug: Drug) => {
+    setSelectedDrug(drug);
+    setPatientAddress('');
+    setIsSaleDialogOpen(true);
   };
 
   return (
@@ -89,20 +106,10 @@ const PharmacyDashboard: React.FC = () => {
                 <Button
                   variant="default"
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                  onClick={() => handleVerifyAndSell(drug.id)}
-                  disabled={verifyingId === drug.id}
+                  onClick={() => openSaleDialog(drug)}
                 >
-                  {verifyingId === drug.id ? (
-                    <>
-                      <Spinner size="sm" className="mr-2" />
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle2 className="w-4 h-4 mr-2" />
-                      Verify & Sell
-                    </>
-                  )}
+                  <CheckCircle2 className="w-4 h-4 mr-2" />
+                  Verify & Sell
                 </Button>
               </div>
             </div>
@@ -113,6 +120,67 @@ const PharmacyDashboard: React.FC = () => {
       {products.length === 0 && !loading && (
         <ProductList drugs={[]} isLoading={false} />
       )}
+
+      {/* Sale Dialog */}
+      <Dialog open={isSaleDialogOpen} onOpenChange={setIsSaleDialogOpen}>
+        <DialogContent className="bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-slate-900">Verify & Sell to Patient</DialogTitle>
+            <DialogDescription className="text-slate-600">
+              Complete the final sale of this pharmaceutical product to the patient.
+            </DialogDescription>
+          </DialogHeader>
+          {selectedDrug && (
+            <div className="py-4">
+              <div className="space-y-2">
+                <p className="text-sm text-slate-700">
+                  <span className="font-semibold">Product:</span> {selectedDrug.name}
+                </p>
+                <p className="text-sm text-slate-700">
+                  <span className="font-semibold">Batch:</span> {selectedDrug.batchNumber}
+                </p>
+                <div className="grid gap-2 pt-4">
+                  <Label htmlFor="patientAddress">Patient Wallet Address</Label>
+                  <Input
+                    id="patientAddress"
+                    placeholder="0x..."
+                    value={patientAddress}
+                    onChange={(e) => setPatientAddress(e.target.value)}
+                    disabled={isSelling}
+                    required
+                  />
+                  <p className="text-xs text-slate-500">
+                    Enter the Sepolia address of the patient receiving the medication.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsSaleDialogOpen(false)}
+              disabled={isSelling}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleVerifyAndSell}
+              disabled={isSelling || !patientAddress.trim()}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              {isSelling ? (
+                <>
+                  <Spinner size="sm" className="mr-2" />
+                  Processing...
+                </>
+              ) : (
+                'Finalize Sale'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

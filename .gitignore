@@ -5,15 +5,19 @@ node_modules/
 
 # Testing
 coverage/
-*.lcov
-.nyc_output
 
 # Production
 dist/
 build/
-out/
 
-# Environment variables
+# Hardhat
+artifacts/
+cache/
+typechain-types/
+flattened/
+slither-report.json
+
+# Environment Variables
 .env
 .env.local
 .env.development.local
@@ -21,40 +25,29 @@ out/
 .env.production.local
 
 # Logs
-logs/
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+logs/
+*.log
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
+# Editor/OS Specific
+.vscode/
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-
-# Hardhat
-cache/
-artifacts/
-typechain/
-typechain-types/
-
-# Hardhat network files
-deployments/
+.DS_Store
+Thumbs.db
 
 # Misc
 .cache/
-.temp/
-.tmp/
-*.tsbuildinfo
-
-# Debug files
-
-clear-cache.js
+.eslintcache
+.stylelintcache
+node_modules/
+.npm
+.yarn-integrity
+.temp
+.tmp

@@ -9,6 +9,7 @@ interface AuthContextType {
   login: (role: UserRole) => void;
   logout: () => void;
   isAuthenticated: boolean;
+  setWalletAddress: (address: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,6 +29,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [currentRole, setCurrentRole] = useState<UserRole | null>(null);
+  const [connectedWalletAddress, setConnectedWalletAddress] = useState<string | null>(null);
 
   // Load user from localStorage on mount
   useEffect(() => {
@@ -42,9 +44,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, []);
 
+  // Update user address when wallet connects
+  useEffect(() => {
+    if (connectedWalletAddress && currentRole) {
+      const user: User = {
+        address: connectedWalletAddress,
+        role: currentRole,
+        name: currentRole.charAt(0) + currentRole.slice(1).toLowerCase(),
+      };
+      setCurrentUser(user);
+      LocalStorageAdapter.set(STORAGE_KEYS.CURRENT_USER, user);
+      console.log('✅ Updated user with wallet address:', connectedWalletAddress);
+    }
+  }, [connectedWalletAddress, currentRole]);
+
+  const setWalletAddress = (address: string) => {
+    setConnectedWalletAddress(address);
+  };
+
   const login = (role: UserRole) => {
+    // Use connected wallet address if available, otherwise fall back to hardcoded address
+    const address = connectedWalletAddress || ROLE_ADDRESSES[role];
+
     const user: User = {
-      address: ROLE_ADDRESSES[role],
+      address,
       role,
       name: role.charAt(0) + role.slice(1).toLowerCase(),
     };
@@ -57,6 +80,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     setCurrentUser(null);
     setCurrentRole(null);
+    setConnectedWalletAddress(null);
     LocalStorageAdapter.remove(STORAGE_KEYS.CURRENT_USER);
   };
 
@@ -66,6 +90,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     login,
     logout,
     isAuthenticated: currentUser !== null,
+    setWalletAddress,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

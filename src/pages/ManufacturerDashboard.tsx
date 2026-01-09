@@ -8,10 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, ArrowRight } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Drug } from '@/types/drug';
-import { ROLE_ADDRESSES } from '@/lib/constants';
-import { UserRole } from '@/types/user';
+import { ethers } from 'ethers';
 
 const ManufacturerDashboard: React.FC = () => {
   const { currentUser } = useAuth();
@@ -25,6 +24,7 @@ const ManufacturerDashboard: React.FC = () => {
   });
   const [selectedDrugForTransfer, setSelectedDrugForTransfer] = useState<Drug | null>(null);
   const [isTransferDialogOpen, setIsTransferDialogOpen] = useState(false);
+  const [recipientAddress, setRecipientAddress] = useState('');
   const [isTransferring, setIsTransferring] = useState(false);
 
   // Fetch products on mount and when user changes
@@ -36,7 +36,7 @@ const ManufacturerDashboard: React.FC = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!currentUser?.address) {
       toast({
         title: 'Error',
@@ -99,13 +99,15 @@ const ManufacturerDashboard: React.FC = () => {
     setIsTransferring(true);
     clearError();
 
-    const distributorAddress = ROLE_ADDRESSES[UserRole.DISTRIBUTOR];
-
     try {
+      if (!ethers.isAddress(recipientAddress)) {
+        throw new Error('Invalid Ethereum address. Please check and try again.');
+      }
+
       const result = await transferProduct(
         selectedDrugForTransfer.id,
         currentUser.address,
-        distributorAddress
+        recipientAddress
       );
 
       if (result.success) {
@@ -115,6 +117,7 @@ const ManufacturerDashboard: React.FC = () => {
         });
         setIsTransferDialogOpen(false);
         setSelectedDrugForTransfer(null);
+        setRecipientAddress('');
       } else {
         toast({
           title: 'Transfer Failed',
@@ -135,6 +138,7 @@ const ManufacturerDashboard: React.FC = () => {
 
   const openTransferDialog = (drug: Drug) => {
     setSelectedDrugForTransfer(drug);
+    setRecipientAddress('');
     setIsTransferDialogOpen(true);
   };
 
@@ -230,6 +234,20 @@ const ManufacturerDashboard: React.FC = () => {
                 <p className="text-sm text-slate-700">
                   <span className="font-semibold">Current Temperature:</span> {selectedDrugForTransfer.temperature}°C
                 </p>
+                <div className="grid gap-2 pt-2">
+                  <Label htmlFor="recipientAddress">Recipient Address (Sepolia Wallet)</Label>
+                  <Input
+                    id="recipientAddress"
+                    placeholder="0x..."
+                    value={recipientAddress}
+                    onChange={(e) => setRecipientAddress(e.target.value)}
+                    disabled={isTransferring}
+                    required
+                  />
+                  <p className="text-xs text-slate-500">
+                    Paste the Sepolia address of the distributor you want to ship to.
+                  </p>
+                </div>
               </div>
             </div>
           )}
@@ -241,7 +259,11 @@ const ManufacturerDashboard: React.FC = () => {
             >
               Cancel
             </Button>
-            <Button onClick={handleTransferToDistributor} disabled={isTransferring} className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button
+              onClick={handleTransferToDistributor}
+              disabled={isTransferring || !recipientAddress.trim()}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
               {isTransferring ? (
                 <>
                   <Spinner size="sm" className="mr-2" />

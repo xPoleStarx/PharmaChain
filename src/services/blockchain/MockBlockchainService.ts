@@ -5,16 +5,16 @@ import {
   Transaction,
   TransactionResult,
   TransactionStatus,
+  UserRole,
+  DEFAULT_BLOCKCHAIN_CONFIG,
+  IBlockchainService,
 } from '@/types';
 import { ROLE_ADDRESSES, STORAGE_KEYS } from '@/lib/constants';
-import { UserRole } from '@/types/user';
 import { generateTransactionHash, delay } from './utils';
-import { DEFAULT_CONFIG } from './types';
 import { LocalStorageAdapter } from '@/services/storage/localStorageAdapter';
-import { IBlockchainService } from './BlockchainService';
 
 export class MockBlockchainService implements IBlockchainService {
-  private config = DEFAULT_CONFIG;
+  private config = DEFAULT_BLOCKCHAIN_CONFIG;
 
   /**
    * Initialize empty ledger if it doesn't exist

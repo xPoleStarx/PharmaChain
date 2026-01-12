@@ -30,3 +30,16 @@ export interface IBlockchainService {
   getAllTransactions(): Promise<any[]>;
   connectWallet(): Promise<string>;
 }
+
+/**
+ * Configuration for blockchain service simulations
+ */
+export interface BlockchainConfig {
+  minDelay: number; // milliseconds
+  maxDelay: number; // milliseconds
+}
+
+export const DEFAULT_BLOCKCHAIN_CONFIG: BlockchainConfig = {
+  minDelay: 1500,
+  maxDelay: 3000,
+};

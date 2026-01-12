@@ -19,3 +19,4 @@ export const TEMPERATURE_THRESHOLDS = {
   MAX: 8, // Celsius
 } as const;
 
+

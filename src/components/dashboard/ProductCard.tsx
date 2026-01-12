@@ -1,8 +1,8 @@
 import React from 'react';
 import { Drug } from '@/types/drug';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { StatusBadge } from '@/components/ui/status-badge';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/UI/card';
+import { Button } from '@/components/UI/button';
+import { StatusBadge } from '@/components/UI/status-badge';
 import { Thermometer, MapPin, Package, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -103,4 +103,5 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     </Card>
   );
 };
+
 

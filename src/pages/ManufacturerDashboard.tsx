@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useBlockchain } from '@/hooks/useBlockchain';
-import { ProductList } from '@/components/dashboard/ProductList';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
-import { useToast } from '@/hooks/use-toast';
+import { ProductList } from '@/components/Dashboard/ProductList';
+import { Button } from '@/components/UI/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/UI/dialog';
+import { Input } from '@/components/UI/input';
+import { Label } from '@/components/UI/label';
+import { Spinner } from '@/components/UI/spinner';
+import { useToast } from '@/hooks/useToast';
 import { Plus } from 'lucide-react';
 import { Drug } from '@/types/drug';
 import { ethers } from 'ethers';
@@ -297,3 +297,4 @@ const ManufacturerDashboard: React.FC = () => {
 };
 
 export default ManufacturerDashboard;
+

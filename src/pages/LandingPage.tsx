@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/UI/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/UI/card';
 import { Package, Shield, Thermometer, Lock, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 const LandingPage: React.FC = () => {
@@ -164,4 +164,5 @@ const LandingPage: React.FC = () => {
 };
 
 export default LandingPage;
+
 

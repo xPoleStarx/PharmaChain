@@ -1,8 +1,8 @@
 import React from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/UI/dialog';
+import { Button } from '@/components/UI/button';
+import { Card, CardContent } from '@/components/UI/card';
 import { Download, Printer } from 'lucide-react';
 
 interface QRCodeGeneratorProps {
@@ -91,4 +91,5 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
     </Dialog>
   );
 };
+
 

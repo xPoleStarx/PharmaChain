@@ -2,10 +2,10 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBlockchain as useBlockchainContext } from '@/context/BlockchainContext';
 import { Transaction, TransactionStatus } from '@/types/transaction';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/UI/card';
+import { Badge } from '@/components/UI/badge';
+import { Button } from '@/components/UI/button';
+import { Spinner } from '@/components/UI/spinner';
 import { Database, CheckCircle2, XCircle, Clock, Package, Truck, Thermometer, MapPin, RefreshCw, ArrowLeft } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -332,3 +332,4 @@ const BlockExplorer: React.FC = () => {
 };
 
 export default BlockExplorer;
+

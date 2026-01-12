@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useBlockchain as useBlockchainContext } from '@/context/BlockchainContext';
-import { ProductCard } from '@/components/dashboard/ProductCard';
-import { HistoryTimeline } from '@/components/dashboard/HistoryTimeline';
-import { TemperatureChart } from '@/components/dashboard/TemperatureChart';
-import { QRCodeGenerator } from '@/components/dashboard/QRCodeGenerator';
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
-import { useToast } from '@/hooks/use-toast';
+import { ProductCard } from '@/components/Dashboard/ProductCard';
+import { HistoryTimeline } from '@/components/Dashboard/HistoryTimeline';
+import { TemperatureChart } from '@/components/Dashboard/TemperatureChart';
+import { QRCodeGenerator } from '@/components/Dashboard/QRCodeGenerator';
+import { Button } from '@/components/UI/button';
+import { Spinner } from '@/components/UI/spinner';
+import { useToast } from '@/hooks/useToast';
 import { ArrowLeft, QrCode } from 'lucide-react';
 import { Drug } from '@/types/drug';
 import { DrugHistory } from '@/types/drug';
@@ -133,4 +133,5 @@ const ProductDetail: React.FC = () => {
 };
 
 export default ProductDetail;
+
 

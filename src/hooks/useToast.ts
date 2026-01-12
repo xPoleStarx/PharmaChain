@@ -1,6 +1,6 @@
 import * as React from "react"
 
-type ToastActionElement = React.ReactElement<typeof import("@/components/ui/toast").ToastAction>
+type ToastActionElement = React.ReactElement<typeof import("@/components/UI/toast").ToastAction>
 
 export type ToastProps = {
   id: string
@@ -194,4 +194,5 @@ function useToast() {
 }
 
 export { useToast, toast }
+
 

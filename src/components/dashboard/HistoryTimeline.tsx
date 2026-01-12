@@ -1,7 +1,7 @@
 import React from 'react';
 import { DrugHistory } from '@/types/drug';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/UI/card';
+import { Badge } from '@/components/UI/badge';
 import {
   Package,
   Truck,
@@ -146,4 +146,5 @@ export const HistoryTimeline: React.FC<HistoryTimelineProps> = ({ history }) => 
     </Card>
   );
 };
+
 

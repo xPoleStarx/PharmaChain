@@ -421,3 +421,4 @@ export class RealBlockchainService implements IBlockchainService {
     return error.reason || error.message || 'Transaction failed';
   }
 }
+

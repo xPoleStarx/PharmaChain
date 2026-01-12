@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useBlockchain } from '@/hooks/useBlockchain';
 import { useBlockchain as useBlockchainContext } from '@/context/BlockchainContext';
-import { ProductCard } from '@/components/dashboard/ProductCard';
-import { HistoryTimeline } from '@/components/dashboard/HistoryTimeline';
-import { TemperatureChart } from '@/components/dashboard/TemperatureChart';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
+import { ProductCard } from '@/components/Dashboard/ProductCard';
+import { HistoryTimeline } from '@/components/Dashboard/HistoryTimeline';
+import { TemperatureChart } from '@/components/Dashboard/TemperatureChart';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/UI/card';
+import { Input } from '@/components/UI/input';
+import { Button } from '@/components/UI/button';
+import { Badge } from '@/components/UI/badge';
+import { useToast } from '@/hooks/useToast';
 import { Search, QrCode, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { Drug } from '@/types/drug';
 import { DrugHistory } from '@/types/drug';
@@ -242,3 +242,4 @@ const PatientView: React.FC = () => {
 };
 
 export default PatientView;
+

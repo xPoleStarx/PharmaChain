@@ -10,7 +10,7 @@ import {
   ReferenceLine,
   Legend,
 } from 'recharts';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/UI/card';
 import { DrugHistory } from '@/types/drug';
 import { format } from 'date-fns';
 import { TEMPERATURE_THRESHOLDS } from '@/lib/constants';
@@ -134,4 +134,5 @@ export const TemperatureChart: React.FC<TemperatureChartProps> = ({ history }) =
     </Card>
   );
 };
+
 

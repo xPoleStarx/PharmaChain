@@ -3,3 +3,4 @@
 interface Window {
     ethereum?: any;
 }
+

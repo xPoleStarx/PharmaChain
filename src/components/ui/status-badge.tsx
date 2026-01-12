@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/components/UI/badge';
 import { cn } from '@/lib/utils';
 
 type StatusType = 'In Transit' | 'Stored' | 'Verified' | 'Registered' | 'Issue' | 'Warning';
@@ -30,4 +30,5 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className }) =
     </Badge>
   );
 };
+
 

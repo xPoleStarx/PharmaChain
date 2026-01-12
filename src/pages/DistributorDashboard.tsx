@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useBlockchain } from '@/hooks/useBlockchain';
-import { ProductList } from '@/components/dashboard/ProductList';
-import { ProductCard } from '@/components/dashboard/ProductCard';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Spinner } from '@/components/ui/spinner';
-import { useToast } from '@/hooks/use-toast';
+import { ProductList } from '@/components/Dashboard/ProductList';
+import { ProductCard } from '@/components/Dashboard/ProductCard';
+import { Button } from '@/components/UI/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/UI/dialog';
+import { Spinner } from '@/components/UI/spinner';
+import { useToast } from '@/hooks/useToast';
 import { Drug } from '@/types/drug';
 import { Thermometer, Truck } from 'lucide-react';
 import { ethers } from 'ethers';
@@ -248,3 +248,4 @@ const DistributorDashboard: React.FC = () => {
 };
 
 export default DistributorDashboard;
+

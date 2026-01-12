@@ -1,7 +1,7 @@
 import React from 'react';
 import { Drug } from '@/types/drug';
 import { ProductCard } from './ProductCard';
-import { Spinner } from '@/components/ui/spinner';
+import { Spinner } from '@/components/UI/spinner';
 import { PackageX } from 'lucide-react';
 
 interface ProductListProps {
@@ -54,4 +54,5 @@ export const ProductList: React.FC<ProductListProps> = ({
     </div>
   );
 };
+
 

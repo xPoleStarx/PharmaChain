@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useBlockchain } from '@/context/BlockchainContext';
 import { UserRole } from '@/types/user';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/UI/select';
+import { Button } from '@/components/UI/button';
 import { Package, Database, Wallet, CheckCircle2 } from 'lucide-react';
 
 const roleRoutes: Record<UserRole, string> = {
@@ -196,3 +196,4 @@ export const Navbar: React.FC = () => {
     </nav>
   );
 };
+

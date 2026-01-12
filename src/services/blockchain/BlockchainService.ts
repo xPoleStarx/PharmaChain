@@ -38,3 +38,4 @@ export interface IBlockchainService {
   getAllTransactions(): Promise<any[]>;
   connectWallet(): Promise<string>;
 }
+

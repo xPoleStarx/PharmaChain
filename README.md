@@ -173,6 +173,7 @@ This project was developed as part of **CENG 3550: Decentralized Systems and App
 ## 👥 Contributors
 
 **Seyfullah Korkmaz**
+**Doğukan Taha Tıraş**
 - System architecture design, Frontend development (React/TypeScript), Ethers.js integration
 
 ---

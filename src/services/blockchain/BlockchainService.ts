@@ -1,4 +1,4 @@
-import { Drug, DrugHistory, TransactionResult } from '../../types';
+import { Drug, DrugHistory, TransactionResult } from '@/types';
 
 /**
  * Interface for blockchain service implementations
@@ -14,11 +14,7 @@ export interface IBlockchainService {
     initialLocation?: string
   ): Promise<TransactionResult>;
 
-  transferDrug(
-    drugId: string,
-    fromAddress: string,
-    toAddress: string
-  ): Promise<TransactionResult>;
+  transferDrug(drugId: string, fromAddress: string, toAddress: string): Promise<TransactionResult>;
 
   updateTemperature(
     drugId: string,
@@ -26,11 +22,7 @@ export interface IBlockchainService {
     updatedBy: string
   ): Promise<TransactionResult>;
 
-  updateLocation(
-    drugId: string,
-    location: string,
-    updatedBy: string
-  ): Promise<TransactionResult>;
+  updateLocation(drugId: string, location: string, updatedBy: string): Promise<TransactionResult>;
 
   getDrugById(drugId: string): Promise<Drug | null>;
   getAllDrugsByOwner(ownerAddress: string): Promise<Drug[]>;
@@ -38,4 +30,3 @@ export interface IBlockchainService {
   getAllTransactions(): Promise<any[]>;
   connectWallet(): Promise<string>;
 }
-

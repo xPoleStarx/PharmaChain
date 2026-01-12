@@ -151,5 +151,3 @@ export const DemoControls: React.FC = () => {
     </>
   );
 };
-
-

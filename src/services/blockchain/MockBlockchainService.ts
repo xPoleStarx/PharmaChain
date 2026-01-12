@@ -1,9 +1,16 @@
-import { Drug, DrugHistory, DrugLedger, Transaction, TransactionResult, TransactionStatus } from '../../types';
-import { ROLE_ADDRESSES, STORAGE_KEYS } from '../../lib/constants';
-import { UserRole } from '../../types/user';
+import {
+  Drug,
+  DrugHistory,
+  DrugLedger,
+  Transaction,
+  TransactionResult,
+  TransactionStatus,
+} from '@/types';
+import { ROLE_ADDRESSES, STORAGE_KEYS } from '@/lib/constants';
+import { UserRole } from '@/types/user';
 import { generateTransactionHash, delay } from './utils';
 import { DEFAULT_CONFIG } from './types';
-import { LocalStorageAdapter } from '../storage/localStorageAdapter';
+import { LocalStorageAdapter } from '@/services/storage/localStorageAdapter';
 import { IBlockchainService } from './BlockchainService';
 
 export class MockBlockchainService implements IBlockchainService {
@@ -213,14 +220,7 @@ export class MockBlockchainService implements IBlockchainService {
     ledger.transactions.push(transaction);
 
     // Add history entry
-    this.addHistoryEntry(
-      ledger,
-      drugId,
-      'TRANSFERRED',
-      transaction.hash,
-      fromAddress,
-      toAddress
-    );
+    this.addHistoryEntry(ledger, drugId, 'TRANSFERRED', transaction.hash, fromAddress, toAddress);
 
     // Save ledger
     this.saveLedger(ledger);
@@ -366,9 +366,7 @@ export class MockBlockchainService implements IBlockchainService {
     await delay(200, 500);
 
     const ledger = this.getLedger();
-    return Object.values(ledger.drugs).filter(
-      (drug) => drug.currentOwner === ownerAddress
-    );
+    return Object.values(ledger.drugs).filter((drug) => drug.currentOwner === ownerAddress);
   }
 
   /**
@@ -401,5 +399,3 @@ export class MockBlockchainService implements IBlockchainService {
 
 // Export singleton instance
 export const mockBlockchainService = new MockBlockchainService();
-
-

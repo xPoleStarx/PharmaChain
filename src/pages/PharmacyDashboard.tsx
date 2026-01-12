@@ -6,7 +6,14 @@ import { ProductCard } from '@/components/Dashboard/ProductCard';
 import { Button } from '@/components/UI/button';
 import { Spinner } from '@/components/UI/spinner';
 import { useToast } from '@/hooks/useToast';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/UI/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/UI/dialog';
 import { Label } from '@/components/UI/label';
 import { Input } from '@/components/UI/input';
 import { CheckCircle2 } from 'lucide-react';
@@ -15,7 +22,8 @@ import { Drug } from '@/types/drug';
 
 const PharmacyDashboard: React.FC = () => {
   const { currentUser } = useAuth();
-  const { loading, error, products, fetchMyProducts, transferProduct, clearError } = useBlockchain();
+  const { loading, error, products, fetchMyProducts, transferProduct, clearError } =
+    useBlockchain();
   const { toast } = useToast();
   const [selectedDrug, setSelectedDrug] = React.useState<Drug | null>(null);
   const [isSaleDialogOpen, setIsSaleDialogOpen] = React.useState(false);
@@ -47,7 +55,8 @@ const PharmacyDashboard: React.FC = () => {
       if (result.success) {
         toast({
           title: 'Product Sold',
-          description: 'Product has been verified and sold to patient. Ownership transferred successfully!',
+          description:
+            'Product has been verified and sold to patient. Ownership transferred successfully!',
         });
         setIsSaleDialogOpen(false);
         setSelectedDrug(null);
@@ -117,9 +126,7 @@ const PharmacyDashboard: React.FC = () => {
         </div>
       )}
 
-      {products.length === 0 && !loading && (
-        <ProductList drugs={[]} isLoading={false} />
-      )}
+      {products.length === 0 && !loading && <ProductList drugs={[]} isLoading={false} />}
 
       {/* Sale Dialog */}
       <Dialog open={isSaleDialogOpen} onOpenChange={setIsSaleDialogOpen}>
@@ -186,4 +193,3 @@ const PharmacyDashboard: React.FC = () => {
 };
 
 export default PharmacyDashboard;
-

@@ -1,6 +1,13 @@
 import React from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/UI/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/UI/dialog';
 import { Button } from '@/components/UI/button';
 import { Card, CardContent } from '@/components/UI/card';
 import { Download, Printer } from 'lucide-react';
@@ -72,7 +79,8 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
                 />
               </div>
               <p className="text-xs text-slate-600 text-center max-w-xs">
-                Scan this QR code to verify product authenticity and view complete supply chain history
+                Scan this QR code to verify product authenticity and view complete supply chain
+                history
               </p>
             </div>
           </Card>
@@ -91,5 +99,3 @@ export const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({
     </Dialog>
   );
 };
-
-

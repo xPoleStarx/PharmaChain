@@ -102,11 +102,7 @@ const ProductDetail: React.FC = () => {
               }}
             />
           </div>
-          <Button
-            onClick={() => setIsQRDialogOpen(true)}
-            variant="outline"
-            className="mt-4"
-          >
+          <Button onClick={() => setIsQRDialogOpen(true)} variant="outline" className="mt-4">
             <QrCode className="w-4 h-4 mr-2" />
             Print Label
           </Button>
@@ -133,5 +129,3 @@ const ProductDetail: React.FC = () => {
 };
 
 export default ProductDetail;
-
-

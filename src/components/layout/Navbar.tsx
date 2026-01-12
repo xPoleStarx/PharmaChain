@@ -7,7 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useBlockchain } from '@/context/BlockchainContext';
 import { UserRole } from '@/types/user';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/UI/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/UI/select';
 import { Button } from '@/components/UI/button';
 import { Package, Database, Wallet, CheckCircle2 } from 'lucide-react';
 
@@ -74,7 +80,9 @@ export const Navbar: React.FC = () => {
 
       // Show user-friendly error
       if (error.message?.includes('MetaMask')) {
-        alert('Please install MetaMask extension to connect your wallet.\n\nVisit: https://metamask.io/download/');
+        alert(
+          'Please install MetaMask extension to connect your wallet.\n\nVisit: https://metamask.io/download/'
+        );
       } else {
         alert(`Failed to connect wallet: ${error.message}`);
       }
@@ -112,9 +120,7 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Package className="w-6 h-6 text-blue-600" />
-              <h1 className="text-xl font-bold text-slate-900">
-                PharmaChain
-              </h1>
+              <h1 className="text-xl font-bold text-slate-900">PharmaChain</h1>
             </div>
             <Button
               variant="ghost"
@@ -164,10 +170,7 @@ export const Navbar: React.FC = () => {
             {/* Role Switcher */}
             <div className="flex items-center gap-2">
               <span className="text-sm text-slate-600">Current Role:</span>
-              <Select
-                value={currentRole || ''}
-                onValueChange={handleRoleChange}
-              >
+              <Select value={currentRole || ''} onValueChange={handleRoleChange}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Select Role">
                     {getRoleDisplayName(currentRole)}
@@ -187,13 +190,10 @@ export const Navbar: React.FC = () => {
         {/* Connection Error Message */}
         {connectionError && (
           <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-md">
-            <p className="text-sm text-red-700">
-              ⚠️ {connectionError}
-            </p>
+            <p className="text-sm text-red-700">⚠️ {connectionError}</p>
           </div>
         )}
       </div>
     </nav>
   );
 };
-

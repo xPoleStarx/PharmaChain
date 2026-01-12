@@ -94,10 +94,10 @@ const PatientView: React.FC = () => {
     try {
       // Get all transactions to find a drug ID
       const transactions = await blockchainService.getAllTransactions();
-      
+
       // Find a drug ID from transactions
-      const drugTransaction = transactions.find(t => t.drugId);
-      
+      const drugTransaction = transactions.find((t) => t.drugId);
+
       if (!drugTransaction?.drugId) {
         toast({
           title: 'No Products Available',
@@ -110,7 +110,7 @@ const PatientView: React.FC = () => {
       // Use the found drug ID
       const demoId = drugTransaction.drugId;
       setProductId(demoId);
-      
+
       // Auto-verify after a short delay
       setTimeout(() => {
         handleVerify();
@@ -141,7 +141,9 @@ const PatientView: React.FC = () => {
     <div className="max-w-4xl mx-auto">
       <div className="mb-6 text-center">
         <h1 className="text-3xl font-bold mb-2 text-slate-900">Product Verification Portal</h1>
-        <p className="text-slate-600">Verify the authenticity and quality of pharmaceutical products</p>
+        <p className="text-slate-600">
+          Verify the authenticity and quality of pharmaceutical products
+        </p>
       </div>
 
       {/* Search Section */}
@@ -165,7 +167,11 @@ const PatientView: React.FC = () => {
                 disabled={loading}
               />
             </div>
-            <Button onClick={handleVerify} disabled={loading || !productId.trim()} className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button
+              onClick={handleVerify}
+              disabled={loading || !productId.trim()}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
               {loading ? (
                 <>
                   <Search className="w-4 h-4 mr-2 animate-spin" />
@@ -199,17 +205,21 @@ const PatientView: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-4">
-                <div className={`w-24 h-24 rounded-full ${getTrustScoreColor(trustScore || 0)} flex items-center justify-center text-white text-2xl font-bold`}>
+                <div
+                  className={`w-24 h-24 rounded-full ${getTrustScoreColor(trustScore || 0)} flex items-center justify-center text-white text-2xl font-bold`}
+                >
                   {trustScore}%
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold mb-1 text-slate-900">{getTrustScoreLabel(trustScore || 0)}</h3>
+                  <h3 className="text-lg font-semibold mb-1 text-slate-900">
+                    {getTrustScoreLabel(trustScore || 0)}
+                  </h3>
                   <p className="text-sm text-slate-700">
                     {trustScore === 100
                       ? 'No temperature violations detected. Product maintained safe conditions throughout the supply chain.'
                       : trustScore && trustScore >= 70
-                      ? 'Minor temperature variations detected. Product is likely safe.'
-                      : 'Temperature violations detected. Product may have been exposed to unsafe conditions.'}
+                        ? 'Minor temperature variations detected. Product is likely safe.'
+                        : 'Temperature violations detected. Product may have been exposed to unsafe conditions.'}
                   </p>
                   {trustScore && trustScore < 100 && (
                     <div className="mt-2 flex items-center gap-2 text-sm text-orange-600">
@@ -242,4 +252,3 @@ const PatientView: React.FC = () => {
 };
 
 export default PatientView;
-

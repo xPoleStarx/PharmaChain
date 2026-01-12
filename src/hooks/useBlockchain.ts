@@ -187,5 +187,3 @@ export const useBlockchain = (): UseBlockchainReturn => {
     clearError,
   };
 };
-
-

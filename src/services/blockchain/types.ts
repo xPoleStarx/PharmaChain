@@ -7,5 +7,3 @@ export const DEFAULT_CONFIG: BlockchainConfig = {
   minDelay: 1500,
   maxDelay: 3000,
 };
-
-

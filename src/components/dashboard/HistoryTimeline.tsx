@@ -2,13 +2,7 @@ import React from 'react';
 import { DrugHistory } from '@/types/drug';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/UI/card';
 import { Badge } from '@/components/UI/badge';
-import {
-  Package,
-  Truck,
-  Thermometer,
-  MapPin,
-  CheckCircle2,
-} from 'lucide-react';
+import { Package, Truck, Thermometer, MapPin, CheckCircle2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
@@ -61,7 +55,9 @@ export const HistoryTimeline: React.FC<HistoryTimelineProps> = ({ history }) => 
       <Card className="bg-white border border-slate-200">
         <CardHeader>
           <CardTitle className="text-slate-900">Product History</CardTitle>
-          <CardDescription className="text-slate-600">Complete journey from manufacturer to patient</CardDescription>
+          <CardDescription className="text-slate-600">
+            Complete journey from manufacturer to patient
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center py-8 text-slate-500">
@@ -76,7 +72,9 @@ export const HistoryTimeline: React.FC<HistoryTimelineProps> = ({ history }) => 
     <Card className="bg-white border border-slate-200">
       <CardHeader>
         <CardTitle className="text-slate-900">Product History</CardTitle>
-        <CardDescription className="text-slate-600">Complete journey from manufacturer to patient</CardDescription>
+        <CardDescription className="text-slate-600">
+          Complete journey from manufacturer to patient
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="relative">
@@ -106,9 +104,7 @@ export const HistoryTimeline: React.FC<HistoryTimelineProps> = ({ history }) => 
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h4 className="font-semibold text-slate-900">
-                            {getEventLabel(event)}
-                          </h4>
+                          <h4 className="font-semibold text-slate-900">{getEventLabel(event)}</h4>
                           <Badge variant="outline" className="text-xs">
                             {event.eventType.replace('_', ' ')}
                           </Badge>
@@ -118,18 +114,22 @@ export const HistoryTimeline: React.FC<HistoryTimelineProps> = ({ history }) => 
                         </p>
                         {event.fromAddress && (
                           <p className="text-xs text-slate-600">
-                            From: <span className="font-mono text-slate-700">{truncateAddress(event.fromAddress)}</span>
+                            From:{' '}
+                            <span className="font-mono text-slate-700">
+                              {truncateAddress(event.fromAddress)}
+                            </span>
                           </p>
                         )}
                         {event.toAddress && (
                           <p className="text-xs text-slate-600">
-                            To: <span className="font-mono text-slate-700">{truncateAddress(event.toAddress)}</span>
+                            To:{' '}
+                            <span className="font-mono text-slate-700">
+                              {truncateAddress(event.toAddress)}
+                            </span>
                           </p>
                         )}
                         {event.location && (
-                          <p className="text-xs text-slate-600 mt-1">
-                            Location: {event.location}
-                          </p>
+                          <p className="text-xs text-slate-600 mt-1">Location: {event.location}</p>
                         )}
                         <p className="text-xs text-slate-500 mt-2 font-mono">
                           TX: {truncateAddress(event.transactionHash, 8, 6)}
@@ -146,5 +146,3 @@ export const HistoryTimeline: React.FC<HistoryTimelineProps> = ({ history }) => 
     </Card>
   );
 };
-
-

@@ -4,7 +4,14 @@ import { useBlockchain } from '@/hooks/useBlockchain';
 import { ProductList } from '@/components/Dashboard/ProductList';
 import { ProductCard } from '@/components/Dashboard/ProductCard';
 import { Button } from '@/components/UI/button';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/UI/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/UI/dialog';
 import { Spinner } from '@/components/UI/spinner';
 import { useToast } from '@/hooks/useToast';
 import { Drug } from '@/types/drug';
@@ -13,7 +20,15 @@ import { ethers } from 'ethers';
 
 const DistributorDashboard: React.FC = () => {
   const { currentUser } = useAuth();
-  const { loading, error, products, fetchMyProducts, transferProduct, simulateIoTUpdate, clearError } = useBlockchain();
+  const {
+    loading,
+    error,
+    products,
+    fetchMyProducts,
+    transferProduct,
+    simulateIoTUpdate,
+    clearError,
+  } = useBlockchain();
   const { toast } = useToast();
   const [selectedDrug, setSelectedDrug] = useState<Drug | null>(null);
   const [isTransferDialogOpen, setIsTransferDialogOpen] = useState(false);
@@ -41,11 +56,7 @@ const DistributorDashboard: React.FC = () => {
         throw new Error('Invalid Ethereum address. Please check and try again.');
       }
 
-      const result = await transferProduct(
-        selectedDrug.id,
-        currentUser.address,
-        recipientAddress
-      );
+      const result = await transferProduct(selectedDrug.id, currentUser.address, recipientAddress);
 
       if (result.success) {
         toast({
@@ -173,9 +184,7 @@ const DistributorDashboard: React.FC = () => {
         </div>
       )}
 
-      {products.length === 0 && !loading && (
-        <ProductList drugs={[]} isLoading={false} />
-      )}
+      {products.length === 0 && !loading && <ProductList drugs={[]} isLoading={false} />}
 
       {/* Transfer Dialog */}
       <Dialog open={isTransferDialogOpen} onOpenChange={setIsTransferDialogOpen}>
@@ -183,7 +192,8 @@ const DistributorDashboard: React.FC = () => {
           <DialogHeader>
             <DialogTitle className="text-slate-900">Ship to Pharmacy</DialogTitle>
             <DialogDescription className="text-slate-600">
-              Transfer ownership of this product to the pharmacy. This action will be recorded on the blockchain.
+              Transfer ownership of this product to the pharmacy. This action will be recorded on
+              the blockchain.
             </DialogDescription>
           </DialogHeader>
           {selectedDrug && (
@@ -196,10 +206,14 @@ const DistributorDashboard: React.FC = () => {
                   <span className="font-semibold">ID:</span> {selectedDrug.id}
                 </p>
                 <p className="text-sm text-slate-700">
-                  <span className="font-semibold">Current Temperature:</span> {selectedDrug.temperature}°C
+                  <span className="font-semibold">Current Temperature:</span>{' '}
+                  {selectedDrug.temperature}°C
                 </p>
                 <div className="grid gap-2 pt-2 text-slate-900 font-medium">
-                  <label htmlFor="recipientAddress" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  <label
+                    htmlFor="recipientAddress"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
                     Recipient Address (Pharmacy Wallet)
                   </label>
                   <input
@@ -248,4 +262,3 @@ const DistributorDashboard: React.FC = () => {
 };
 
 export default DistributorDashboard;
-

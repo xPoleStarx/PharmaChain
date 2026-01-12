@@ -1,6 +1,12 @@
 import { ethers } from 'ethers';
-import { IBlockchainService } from './BlockchainService';
-import { Drug, DrugHistory, TransactionResult, Transaction, TransactionStatus } from '../../types';
+import {
+  IBlockchainService,
+  Drug,
+  DrugHistory,
+  TransactionResult,
+  Transaction,
+  TransactionStatus,
+} from '@/types';
 import PharmaChainArtifact from '../../../artifacts/contracts/PharmaChain.sol/PharmaChain.json';
 
 /**
@@ -75,7 +81,7 @@ export class RealBlockchainService implements IBlockchainService {
         if (userAddress) {
           const normalizedUserAddress = userAddress.toLowerCase();
           const matchingAccount = accounts.find(
-            acc => acc.address.toLowerCase() === normalizedUserAddress
+            (acc) => acc.address.toLowerCase() === normalizedUserAddress
           );
           if (matchingAccount) {
             this.signer = await this.provider.getSigner(matchingAccount.address);
@@ -240,7 +246,10 @@ export class RealBlockchainService implements IBlockchainService {
   async getAllDrugsByOwner(ownerAddress: string): Promise<Drug[]> {
     try {
       const normalizedOwner = ownerAddress.toLowerCase();
-      console.log('🔍 [getAllDrugsByOwner] Fetching all on-chain events for owner:', normalizedOwner);
+      console.log(
+        '🔍 [getAllDrugsByOwner] Fetching all on-chain events for owner:',
+        normalizedOwner
+      );
 
       const fromBlock = this.deploymentBlock;
 
@@ -253,7 +262,7 @@ export class RealBlockchainService implements IBlockchainService {
 
       console.log('📊 [getAllDrugsByOwner] Total raw events found:', {
         registered: regEvents.length,
-        transferred: transEvents.length
+        transferred: transEvents.length,
       });
 
       const drugIds = new Set<string>();
@@ -261,7 +270,7 @@ export class RealBlockchainService implements IBlockchainService {
       // 2. Helper to safely extract Drug ID
       const extractIdFromArgs = (args: any): string => {
         const id = args.drugId || args[0];
-        return typeof id === 'object' ? (id.hash || JSON.stringify(id)) : String(id);
+        return typeof id === 'object' ? id.hash || JSON.stringify(id) : String(id);
       };
 
       // 3. Process Registrations (Where user is the manufacturer)
@@ -289,7 +298,7 @@ export class RealBlockchainService implements IBlockchainService {
           drugId,
           from: event.args.from || event.args[1],
           to: to,
-          lookingFor: normalizedOwner
+          lookingFor: normalizedOwner,
         });
 
         if (to === normalizedOwner) {
@@ -300,7 +309,9 @@ export class RealBlockchainService implements IBlockchainService {
 
       // 5. Hydrate Drug Details & Verify Current Ownership
       const drugs: Drug[] = [];
-      console.log(`🔍 [getAllDrugsByOwner] Validating current ownership for ${drugIds.size} candidate(s)...`);
+      console.log(
+        `🔍 [getAllDrugsByOwner] Validating current ownership for ${drugIds.size} candidate(s)...`
+      );
 
       for (const id of drugIds) {
         const drug = await this.getDrugById(id);
@@ -310,12 +321,16 @@ export class RealBlockchainService implements IBlockchainService {
           if (currentOwner === normalizedOwner) {
             drugs.push(drug);
           } else {
-            console.log(`ℹ️ Skipping ${id}: User was recipient, but current owner is ${currentOwner}`);
+            console.log(
+              `ℹ️ Skipping ${id}: User was recipient, but current owner is ${currentOwner}`
+            );
           }
         }
       }
 
-      console.log(`🎯 [getAllDrugsByOwner] Final Dashboard Count: ${drugs.length} for ${normalizedOwner}`);
+      console.log(
+        `🎯 [getAllDrugsByOwner] Final Dashboard Count: ${drugs.length} for ${normalizedOwner}`
+      );
       return drugs;
     } catch (error) {
       console.error('❌ [getAllDrugsByOwner] Critical fetch error:', error);
@@ -347,10 +362,26 @@ export class RealBlockchainService implements IBlockchainService {
       console.log('🔍 [getAllTransactions] Querying from block:', this.deploymentBlock);
 
       const [reg, trans, temp, loc] = await Promise.all([
-        this.contract.queryFilter(this.contract.filters.DrugRegistered(), this.deploymentBlock, 'latest'),
-        this.contract.queryFilter(this.contract.filters.DrugTransferred(), this.deploymentBlock, 'latest'),
-        this.contract.queryFilter(this.contract.filters.TemperatureUpdated(), this.deploymentBlock, 'latest'),
-        this.contract.queryFilter(this.contract.filters.LocationUpdated(), this.deploymentBlock, 'latest'),
+        this.contract.queryFilter(
+          this.contract.filters.DrugRegistered(),
+          this.deploymentBlock,
+          'latest'
+        ),
+        this.contract.queryFilter(
+          this.contract.filters.DrugTransferred(),
+          this.deploymentBlock,
+          'latest'
+        ),
+        this.contract.queryFilter(
+          this.contract.filters.TemperatureUpdated(),
+          this.deploymentBlock,
+          'latest'
+        ),
+        this.contract.queryFilter(
+          this.contract.filters.LocationUpdated(),
+          this.deploymentBlock,
+          'latest'
+        ),
       ]);
 
       console.log('🔍 [getAllTransactions] Events found:', {
@@ -358,7 +389,7 @@ export class RealBlockchainService implements IBlockchainService {
         transferred: trans.length,
         temperatureUpdated: temp.length,
         locationUpdated: loc.length,
-        total: reg.length + trans.length + temp.length + loc.length
+        total: reg.length + trans.length + temp.length + loc.length,
       });
 
       const allEvents = [...reg, ...trans, ...temp, ...loc];
@@ -383,13 +414,22 @@ export class RealBlockchainService implements IBlockchainService {
           if (fragmentName === 'LocationUpdated') method = 'updateLocation';
 
           const drugIdRaw = eventLog.args.drugId || eventLog.args[0];
-          const drugId = typeof drugIdRaw === 'object' ? (drugIdRaw.hash || JSON.stringify(drugIdRaw)) : String(drugIdRaw);
+          const drugId =
+            typeof drugIdRaw === 'object'
+              ? drugIdRaw.hash || JSON.stringify(drugIdRaw)
+              : String(drugIdRaw);
 
           return {
             hash: String(eventLog.transactionHash),
             status: TransactionStatus.SUCCESS,
             timestamp: Number(block.timestamp) * 1000,
-            from: String(eventLog.args.manufacturer || eventLog.args.from || eventLog.args.updatedBy || eventLog.args[1] || ''),
+            from: String(
+              eventLog.args.manufacturer ||
+                eventLog.args.from ||
+                eventLog.args.updatedBy ||
+                eventLog.args[1] ||
+                ''
+            ),
             to: eventLog.args.to ? String(eventLog.args.to) : undefined,
             method,
             drugId,
@@ -397,7 +437,9 @@ export class RealBlockchainService implements IBlockchainService {
         })
       );
 
-      return transactions.filter((t): t is Transaction => t !== null).sort((a, b) => b.timestamp - a.timestamp);
+      return transactions
+        .filter((t): t is Transaction => t !== null)
+        .sort((a, b) => b.timestamp - a.timestamp);
     } catch (error) {
       console.error('❌ [getAllTransactions] Error fetching transactions:', error);
       return [];

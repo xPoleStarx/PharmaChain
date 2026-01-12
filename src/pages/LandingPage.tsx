@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/UI/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/UI/card';
 import { Package, Shield, Thermometer, Lock, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 const LandingPage: React.FC = () => {
@@ -21,17 +21,20 @@ const LandingPage: React.FC = () => {
               <Package className="w-10 h-10 text-white" />
             </div>
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-4">
-            PharmaChain
-          </h1>
+          <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-4">PharmaChain</h1>
           <p className="text-xl md:text-2xl text-slate-700 mb-8 max-w-3xl mx-auto">
             Securing the Pharmaceutical Supply Chain with Blockchain & IoT
           </p>
           <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
-            Track pharmaceutical products from manufacturer to patient with immutable blockchain records
-            and real-time cold chain monitoring. Prevent counterfeit drugs and ensure product integrity.
+            Track pharmaceutical products from manufacturer to patient with immutable blockchain
+            records and real-time cold chain monitoring. Prevent counterfeit drugs and ensure
+            product integrity.
           </p>
-          <Button size="lg" onClick={handleLaunchDemo} className="text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700 text-white">
+          <Button
+            size="lg"
+            onClick={handleLaunchDemo}
+            className="text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700 text-white"
+          >
             Launch Demo
             <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
@@ -46,8 +49,8 @@ const LandingPage: React.FC = () => {
               </div>
               <CardTitle className="text-slate-900">Immutable Tracking</CardTitle>
               <CardDescription className="text-slate-600">
-                Every product movement is recorded on the blockchain, creating an unalterable audit trail
-                from manufacturer to patient.
+                Every product movement is recorded on the blockchain, creating an unalterable audit
+                trail from manufacturer to patient.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -75,8 +78,8 @@ const LandingPage: React.FC = () => {
               </div>
               <CardTitle className="text-slate-900">Cold Chain Monitoring</CardTitle>
               <CardDescription className="text-slate-600">
-                Real-time IoT sensor data ensures temperature-sensitive drugs maintain safe conditions
-                throughout the supply chain.
+                Real-time IoT sensor data ensures temperature-sensitive drugs maintain safe
+                conditions throughout the supply chain.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -104,8 +107,8 @@ const LandingPage: React.FC = () => {
               </div>
               <CardTitle className="text-slate-900">Counterfeit Prevention</CardTitle>
               <CardDescription className="text-slate-600">
-                Blockchain verification ensures product authenticity, reducing counterfeit drug incidents
-                by up to 90%.
+                Blockchain verification ensures product authenticity, reducing counterfeit drug
+                incidents by up to 90%.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -153,7 +156,12 @@ const LandingPage: React.FC = () => {
           <p className="text-lg text-slate-600 mb-8">
             Experience the power of blockchain-based pharmaceutical tracking
           </p>
-          <Button size="lg" onClick={handleLaunchDemo} variant="outline" className="text-lg px-8 py-6">
+          <Button
+            size="lg"
+            onClick={handleLaunchDemo}
+            variant="outline"
+            className="text-lg px-8 py-6"
+          >
             Start Demo
             <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
@@ -164,4 +172,3 @@ const LandingPage: React.FC = () => {
 };
 
 export default LandingPage;
-

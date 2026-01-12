@@ -2,11 +2,22 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBlockchain as useBlockchainContext } from '@/context/BlockchainContext';
 import { Transaction, TransactionStatus } from '@/types/transaction';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
-import { Database, CheckCircle2, XCircle, Clock, Package, Truck, Thermometer, MapPin, RefreshCw, ArrowLeft } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/UI/card';
+import { Badge } from '@/components/UI/badge';
+import { Button } from '@/components/UI/button';
+import { Spinner } from '@/components/UI/spinner';
+import {
+  Database,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  Package,
+  Truck,
+  Thermometer,
+  MapPin,
+  RefreshCw,
+  ArrowLeft,
+} from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
@@ -20,44 +31,45 @@ const BlockExplorer: React.FC = () => {
   const [knownTransactionHashes, setKnownTransactionHashes] = useState<Set<string>>(new Set());
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const loadTransactions = useCallback(async (showRefreshing = false) => {
-    if (showRefreshing) {
-      setRefreshing(true);
-    } else {
-      setLoading(true);
-    }
-    try {
-      const allTransactions = await blockchainService.getAllTransactions();
-      // Sort by timestamp (newest first)
-      const sorted = allTransactions.sort((a, b) => b.timestamp - a.timestamp);
-      
-      // Track new transactions
-      setKnownTransactionHashes(prev => {
-        const currentHashes = new Set(sorted.map(tx => tx.hash));
-        const newHashes = new Set(
-          Array.from(currentHashes).filter(hash => !prev.has(hash))
-        );
-        
-        // If there are new transactions and we're not in initial load, show notification
-        if (newHashes.size > 0 && prev.size > 0 && showRefreshing) {
-          // Visual feedback: scroll to top to show new transactions
-          setTimeout(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }, 100);
-        }
-        
-        return currentHashes;
-      });
-      
-      setTransactions(sorted);
-      setLastUpdateTime(new Date());
-    } catch (error) {
-      console.error('Error loading transactions:', error);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, [blockchainService]);
+  const loadTransactions = useCallback(
+    async (showRefreshing = false) => {
+      if (showRefreshing) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
+      try {
+        const allTransactions = await blockchainService.getAllTransactions();
+        // Sort by timestamp (newest first)
+        const sorted = allTransactions.sort((a, b) => b.timestamp - a.timestamp);
+
+        // Track new transactions
+        setKnownTransactionHashes((prev) => {
+          const currentHashes = new Set(sorted.map((tx) => tx.hash));
+          const newHashes = new Set(Array.from(currentHashes).filter((hash) => !prev.has(hash)));
+
+          // If there are new transactions and we're not in initial load, show notification
+          if (newHashes.size > 0 && prev.size > 0 && showRefreshing) {
+            // Visual feedback: scroll to top to show new transactions
+            setTimeout(() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 100);
+          }
+
+          return currentHashes;
+        });
+
+        setTransactions(sorted);
+        setLastUpdateTime(new Date());
+      } catch (error) {
+        console.error('Error loading transactions:', error);
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
+      }
+    },
+    [blockchainService]
+  );
 
   useEffect(() => {
     // Initial load
@@ -257,8 +269,8 @@ const BlockExplorer: React.FC = () => {
               <Database className="w-16 h-16 text-slate-400 mb-4" />
               <h3 className="text-lg font-semibold text-slate-900 mb-2">No Transactions Found</h3>
               <p className="text-slate-600 max-w-md">
-                There are no transactions recorded on the blockchain yet. Start by registering a product or performing
-                transfers.
+                There are no transactions recorded on the blockchain yet. Start by registering a
+                product or performing transfers.
               </p>
             </div>
           ) : (
@@ -273,54 +285,60 @@ const BlockExplorer: React.FC = () => {
                       tx.status === TransactionStatus.SUCCESS
                         ? 'bg-green-50 border-green-200 hover:bg-green-100'
                         : tx.status === TransactionStatus.FAILED
-                        ? 'bg-red-50 border-red-200 hover:bg-red-100'
-                        : 'bg-yellow-50 border-yellow-200 hover:bg-yellow-100',
+                          ? 'bg-red-50 border-red-200 hover:bg-red-100'
+                          : 'bg-yellow-50 border-yellow-200 hover:bg-yellow-100',
                       isNew && 'ring-2 ring-blue-400 ring-opacity-50'
                     )}
                   >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        {getMethodIcon(tx.method)}
-                        <h3 className="font-semibold text-slate-900">{getMethodLabel(tx.method)}</h3>
-                        {getStatusBadge(tx.status)}
-                        {isNew && (
-                          <Badge className="bg-blue-500 hover:bg-blue-600 text-white animate-pulse">
-                            New
-                          </Badge>
-                        )}
-                      </div>
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          {getMethodIcon(tx.method)}
+                          <h3 className="font-semibold text-slate-900">
+                            {getMethodLabel(tx.method)}
+                          </h3>
+                          {getStatusBadge(tx.status)}
+                          {isNew && (
+                            <Badge className="bg-blue-500 hover:bg-blue-600 text-white animate-pulse">
+                              New
+                            </Badge>
+                          )}
+                        </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                        <div>
-                          <p className="text-slate-600 mb-1">Transaction Hash</p>
-                          <p className="font-mono text-slate-900 break-all">{truncateHash(tx.hash)}</p>
-                        </div>
-                        <div>
-                          <p className="text-slate-600 mb-1">Timestamp</p>
-                          <p className="text-slate-900">{format(new Date(tx.timestamp), 'PPpp')}</p>
-                        </div>
-                        <div>
-                          <p className="text-slate-600 mb-1">From</p>
-                          <p className="font-mono text-slate-900">{truncateAddress(tx.from)}</p>
-                        </div>
-                        {tx.to && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                           <div>
-                            <p className="text-slate-600 mb-1">To</p>
-                            <p className="font-mono text-slate-900">{truncateAddress(tx.to)}</p>
+                            <p className="text-slate-600 mb-1">Transaction Hash</p>
+                            <p className="font-mono text-slate-900 break-all">
+                              {truncateHash(tx.hash)}
+                            </p>
                           </div>
-                        )}
-                        {tx.drugId && (
-                          <div className="md:col-span-2">
-                            <p className="text-slate-600 mb-1">Product ID</p>
-                            <p className="font-mono text-slate-900 break-all">{tx.drugId}</p>
+                          <div>
+                            <p className="text-slate-600 mb-1">Timestamp</p>
+                            <p className="text-slate-900">
+                              {format(new Date(tx.timestamp), 'PPpp')}
+                            </p>
                           </div>
-                        )}
+                          <div>
+                            <p className="text-slate-600 mb-1">From</p>
+                            <p className="font-mono text-slate-900">{truncateAddress(tx.from)}</p>
+                          </div>
+                          {tx.to && (
+                            <div>
+                              <p className="text-slate-600 mb-1">To</p>
+                              <p className="font-mono text-slate-900">{truncateAddress(tx.to)}</p>
+                            </div>
+                          )}
+                          {tx.drugId && (
+                            <div className="md:col-span-2">
+                              <p className="text-slate-600 mb-1">Product ID</p>
+                              <p className="font-mono text-slate-900 break-all">{tx.drugId}</p>
+                            </div>
+                          )}
+                        </div>
                       </div>
+                      <div className="flex items-center">{getStatusIcon(tx.status)}</div>
                     </div>
-                    <div className="flex items-center">{getStatusIcon(tx.status)}</div>
                   </div>
-                </div>
                 );
               })}
             </div>

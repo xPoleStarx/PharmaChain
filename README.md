@@ -149,13 +149,13 @@ The project is already optimized for Sepolia. If you wish to deploy your own ver
 2. **Deploy**: `npx hardhat run scripts/deploy.cjs --network sepolia`
 3. **Verify**: Check [Sepolia Etherscan](https://sepolia.etherscan.io/) for your contract.
 
-For detailed instructions, refer to the [Sepolia Deployment Guide](SEPOLIA_DEPLOYMENT_GUIDE.md).
+For detailed instructions, refer to the [Sepolia Deployment Guide](docs/SEPOLIA_DEPLOYMENT_GUIDE.md).
 
 ---
 
 ## 🎬 Demo Scenario
 
-To test the full supply chain flow (Manufacturer → Distributor → Pharmacy → Patient), please follow the **[Live Demo Scenario](DEMO_SENARYOSU.md)**. 
+To test the full supply chain flow (Manufacturer → Distributor → Pharmacy → Patient), please follow the **[Live Demo Scenario](docs/DEMO_SENARYOSU.md)**. 
 
 ---
 

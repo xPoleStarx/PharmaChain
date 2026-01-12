@@ -10,7 +10,7 @@ import {
   ReferenceLine,
   Legend,
 } from 'recharts';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/UI/card';
 import { DrugHistory } from '@/types/drug';
 import { format } from 'date-fns';
 import { TEMPERATURE_THRESHOLDS } from '@/lib/constants';
@@ -30,7 +30,9 @@ export const TemperatureChart: React.FC<TemperatureChartProps> = ({ history }) =
   const chartData = useMemo<ChartDataPoint[]>(() => {
     // Filter only temperature update events
     const tempEvents = history
-      .filter((event) => event.eventType === 'TEMPERATURE_UPDATED' && event.temperature !== undefined)
+      .filter(
+        (event) => event.eventType === 'TEMPERATURE_UPDATED' && event.temperature !== undefined
+      )
       .map((event) => ({
         timestamp: event.timestamp,
         temperature: event.temperature!,
@@ -77,12 +79,14 @@ export const TemperatureChart: React.FC<TemperatureChartProps> = ({ history }) =
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-            <XAxis
-              dataKey="timeLabel"
-              tick={{ fill: '#64748b', fontSize: 12 }}
-            />
+            <XAxis dataKey="timeLabel" tick={{ fill: '#64748b', fontSize: 12 }} />
             <YAxis
-              label={{ value: 'Temperature (°C)', angle: -90, position: 'insideLeft', fill: '#64748b' }}
+              label={{
+                value: 'Temperature (°C)',
+                angle: -90,
+                position: 'insideLeft',
+                fill: '#64748b',
+              }}
               domain={[0, 12]}
               tick={{ fill: '#64748b', fontSize: 12 }}
             />
@@ -134,4 +138,3 @@ export const TemperatureChart: React.FC<TemperatureChartProps> = ({ history }) =
     </Card>
   );
 };
-

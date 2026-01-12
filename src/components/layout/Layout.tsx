@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Navbar } from './Navbar';
-import { DemoControls } from '../demo/DemoControls';
+import { DemoControls } from '@/components/Demo/DemoControls';
 
 export const Layout: React.FC = () => {
   const location = useLocation();

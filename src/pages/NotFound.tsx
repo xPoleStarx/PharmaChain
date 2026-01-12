@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/UI/button';
 import { Package, Home } from 'lucide-react';
 
 const NotFound: React.FC = () => {
@@ -12,9 +12,7 @@ const NotFound: React.FC = () => {
             <Package className="w-12 h-12 text-slate-400" />
           </div>
           <h1 className="text-6xl font-bold text-slate-900 mb-2">404</h1>
-          <h2 className="text-2xl font-semibold text-slate-700 mb-4">
-            Lost in the Chain?
-          </h2>
+          <h2 className="text-2xl font-semibold text-slate-700 mb-4">Lost in the Chain?</h2>
           <p className="text-slate-600 mb-8">
             The product or page you're looking for doesn't exist in our blockchain ledger. It may
             have been moved, deleted, or never registered.

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, UserRole } from '../types/user';
-import { ROLE_ADDRESSES, STORAGE_KEYS } from '../lib/constants';
-import { LocalStorageAdapter } from '../services/storage/localStorageAdapter';
+import { User, UserRole } from '@/types/user';
+import { ROLE_ADDRESSES, STORAGE_KEYS } from '@/lib/constants';
+import { LocalStorageAdapter } from '@/services/storage/localStorageAdapter';
 
 interface AuthContextType {
   currentUser: User | null;
@@ -95,4 +95,3 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-

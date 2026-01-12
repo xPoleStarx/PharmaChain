@@ -2,7 +2,7 @@ import { DrugLedger } from '@/types/drug';
 import { ROLE_ADDRESSES } from '@/lib/constants';
 import { UserRole } from '@/types/user';
 import { generateTransactionHash } from './utils';
-import { LocalStorageAdapter } from '../storage/localStorageAdapter';
+import { LocalStorageAdapter } from '@/services/storage/localStorageAdapter';
 import { STORAGE_KEYS } from '@/lib/constants';
 
 export function seedDemoData(): void {
@@ -16,14 +16,14 @@ export function seedDemoData(): void {
 
   // Drug 2: Vaccine-X - In Transit by Distributor (with temp data)
   const vaccineId = 'DRUG-VACCINE-X-2024-002';
-  const vaccineRegisteredAt = now - (oneHour * 3);
-  const vaccineTransferredAt = now - (oneHour * 2);
+  const vaccineRegisteredAt = now - oneHour * 3;
+  const vaccineTransferredAt = now - oneHour * 2;
 
   // Drug 3: Antibiotic - Verified at Pharmacy
   const antibioticId = 'DRUG-ANTIBIOTIC-2024-003';
-  const antibioticRegisteredAt = now - (oneHour * 5);
-  const antibioticTransferredToDistributor = now - (oneHour * 4);
-  const antibioticTransferredToPharmacy = now - (oneHour * 1);
+  const antibioticRegisteredAt = now - oneHour * 5;
+  const antibioticTransferredToDistributor = now - oneHour * 4;
+  const antibioticTransferredToPharmacy = now - oneHour * 1;
 
   const ledger: DrugLedger = {
     drugs: {
@@ -209,4 +209,3 @@ export function resetSystem(): void {
   LocalStorageAdapter.remove(STORAGE_KEYS.LEDGER);
   LocalStorageAdapter.remove(STORAGE_KEYS.CURRENT_USER);
 }
-

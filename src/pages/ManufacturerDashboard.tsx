@@ -1,20 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useBlockchain } from '@/hooks/useBlockchain';
-import { ProductList } from '@/components/dashboard/ProductList';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
-import { useToast } from '@/hooks/use-toast';
+import { ProductList } from '@/components/Dashboard/ProductList';
+import { Button } from '@/components/UI/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/UI/dialog';
+import { Input } from '@/components/UI/input';
+import { Label } from '@/components/UI/label';
+import { Spinner } from '@/components/UI/spinner';
+import { useToast } from '@/hooks/useToast';
 import { Plus } from 'lucide-react';
 import { Drug } from '@/types/drug';
 import { ethers } from 'ethers';
 
 const ManufacturerDashboard: React.FC = () => {
   const { currentUser } = useAuth();
-  const { loading, error, products, fetchMyProducts, registerProduct, transferProduct, clearError } = useBlockchain();
+  const {
+    loading,
+    error,
+    products,
+    fetchMyProducts,
+    registerProduct,
+    transferProduct,
+    clearError,
+  } = useBlockchain();
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
@@ -160,7 +176,8 @@ const ManufacturerDashboard: React.FC = () => {
             <DialogHeader>
               <DialogTitle className="text-slate-900">Register New Drug</DialogTitle>
               <DialogDescription className="text-slate-600">
-                Register a new pharmaceutical product on the blockchain. This will create an immutable record.
+                Register a new pharmaceutical product on the blockchain. This will create an
+                immutable record.
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleRegister}>
@@ -197,7 +214,11 @@ const ManufacturerDashboard: React.FC = () => {
                 >
                   Cancel
                 </Button>
-                <Button type="submit" disabled={isRegistering} className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button
+                  type="submit"
+                  disabled={isRegistering}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
                   {isRegistering ? (
                     <>
                       <Spinner size="sm" className="mr-2" />
@@ -219,7 +240,8 @@ const ManufacturerDashboard: React.FC = () => {
           <DialogHeader>
             <DialogTitle className="text-slate-900">Transfer to Distributor</DialogTitle>
             <DialogDescription className="text-slate-600">
-              Transfer ownership of this product to the distributor. This action will be recorded on the blockchain.
+              Transfer ownership of this product to the distributor. This action will be recorded on
+              the blockchain.
             </DialogDescription>
           </DialogHeader>
           {selectedDrugForTransfer && (
@@ -232,7 +254,8 @@ const ManufacturerDashboard: React.FC = () => {
                   <span className="font-semibold">ID:</span> {selectedDrugForTransfer.id}
                 </p>
                 <p className="text-sm text-slate-700">
-                  <span className="font-semibold">Current Temperature:</span> {selectedDrugForTransfer.temperature}°C
+                  <span className="font-semibold">Current Temperature:</span>{' '}
+                  {selectedDrugForTransfer.temperature}°C
                 </p>
                 <div className="grid gap-2 pt-2">
                   <Label htmlFor="recipientAddress">Recipient Address (Sepolia Wallet)</Label>

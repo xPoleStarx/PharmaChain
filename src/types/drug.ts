@@ -27,4 +27,3 @@ export interface DrugLedger {
   transactions: Transaction[];
   history: Record<string, DrugHistory[]>;
 }
-

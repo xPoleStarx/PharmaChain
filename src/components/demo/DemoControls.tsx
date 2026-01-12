@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/UI/button';
 import {
   Dialog,
   DialogContent,
@@ -7,8 +7,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { useToast } from '@/hooks/use-toast';
+} from '@/components/UI/dialog';
+import { useToast } from '@/hooks/useToast';
 import { Settings, RotateCcw, Database, AlertTriangle } from 'lucide-react';
 import { seedDemoData, resetSystem } from '@/services/blockchain/seedData';
 import { useAuth } from '@/context/AuthContext';
@@ -151,4 +151,3 @@ export const DemoControls: React.FC = () => {
     </>
   );
 };
-

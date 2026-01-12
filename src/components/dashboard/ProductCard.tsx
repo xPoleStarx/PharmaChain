@@ -1,8 +1,15 @@
 import React from 'react';
 import { Drug } from '@/types/drug';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { StatusBadge } from '@/components/ui/status-badge';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/UI/card';
+import { Button } from '@/components/UI/button';
+import { StatusBadge } from '@/components/UI/status-badge';
 import { Thermometer, MapPin, Package, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -25,7 +32,8 @@ const truncateId = (id: string, maxLength: number = 12): string => {
 
 const getStatusFromLocation = (location: string): string => {
   if (location.toLowerCase().includes('transit')) return 'In Transit';
-  if (location.toLowerCase().includes('warehouse') || location.toLowerCase().includes('stored')) return 'Stored';
+  if (location.toLowerCase().includes('warehouse') || location.toLowerCase().includes('stored'))
+    return 'Stored';
   if (location.toLowerCase().includes('pharmacy')) return 'Verified';
   return 'Registered';
 };
@@ -41,7 +49,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   drug,
   onViewDetails,
   onTransferClick,
-  showTransferButton = false
+  showTransferButton = false,
 }) => {
   const status = getStatusFromLocation(drug.location);
   const tempColor = getTemperatureColor(drug.temperature);
@@ -63,29 +71,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       <CardContent className="space-y-3">
         <div className="flex items-center gap-2 text-sm">
           <span className="text-slate-600">Owner:</span>
-          <span className="font-mono text-xs text-slate-700">{truncateAddress(drug.currentOwner)}</span>
+          <span className="font-mono text-xs text-slate-700">
+            {truncateAddress(drug.currentOwner)}
+          </span>
         </div>
         <div className="flex items-center gap-2 text-sm">
           <Thermometer className={cn('w-4 h-4', tempColor)} />
-          <span className={cn('font-semibold', tempColor)}>
-            {drug.temperature}°C
-          </span>
+          <span className={cn('font-semibold', tempColor)}>{drug.temperature}°C</span>
         </div>
         <div className="flex items-center gap-2 text-sm">
           <MapPin className="w-4 h-4 text-slate-400" />
           <span className="text-slate-700 truncate">{drug.location}</span>
         </div>
-        <div className="text-xs text-slate-600">
-          Batch: {drug.batchNumber}
-        </div>
+        <div className="text-xs text-slate-600">Batch: {drug.batchNumber}</div>
       </CardContent>
       <CardFooter>
         <div className="w-full flex gap-2">
-          <Button
-            variant="ghost"
-            className="flex-1"
-            onClick={() => onViewDetails?.(drug.id)}
-          >
+          <Button variant="ghost" className="flex-1" onClick={() => onViewDetails?.(drug.id)}>
             View Details
           </Button>
           {showTransferButton && onTransferClick && (
@@ -103,4 +105,3 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     </Card>
   );
 };
-

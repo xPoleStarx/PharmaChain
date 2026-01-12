@@ -20,4 +20,3 @@ export interface TransactionResult {
   message?: string;
   error?: string;
 }
-

@@ -1,0 +1,10 @@
+# Ignore artifacts:
+build
+dist
+coverage
+node_modules
+artifacts
+cache
+*.min.js
+*.min.css
+package-lock.json

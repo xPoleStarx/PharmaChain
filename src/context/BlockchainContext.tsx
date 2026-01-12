@@ -1,7 +1,7 @@
 import React, { createContext, useContext, ReactNode, useMemo } from 'react';
-import { mockBlockchainService } from '../services/blockchain/MockBlockchainService';
-import { RealBlockchainService } from '../services/blockchain/RealBlockchainService';
-import { IBlockchainService } from '../services/blockchain/BlockchainService';
+import { mockBlockchainService } from '@/services/blockchain/mockBlockchainService';
+import { RealBlockchainService } from '@/services/blockchain/realBlockchainService';
+import { IBlockchainService } from '@/types';
 
 interface BlockchainContextType {
   blockchainService: IBlockchainService;
@@ -46,4 +46,3 @@ export const BlockchainProvider: React.FC<BlockchainProviderProps> = ({ children
 
   return <BlockchainContext.Provider value={value}>{children}</BlockchainContext.Provider>;
 };
-
